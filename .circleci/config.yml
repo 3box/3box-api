@@ -1,0 +1,105 @@
+orbs:
+  aws-cli: circleci/aws-cli@0.1.13
+  aws-ecr: circleci/aws-ecr@1.0.0
+version: 2.1
+
+jobs:
+  test:
+    working_directory: ~/3box-pinning-server
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+
+      - run:
+          name: install dependencies
+          command: |
+            sudo npm i -g  codecov node-gyp
+            npm i
+
+      - run:
+          name: test
+          command: npm test && codecov
+
+      - run:
+          name: lint
+          command: npm run lint
+
+      - run:
+          name: code-coverage
+          command: bash <(curl -s https://codecov.io/bash)
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
+  deploy-dev:
+    working_directory: ~/3box-pinning-server
+    docker:
+      - image: circleci/python:3.7.1
+    steps:
+      - aws-cli/install
+      - aws-cli/configure
+      - run:
+          name: Deploy Pinning Service
+          command: aws ecs update-service --force-new-deployment --cluster  pinning-node-cluster-dev  --service pinning-node-service-dev
+      - run:
+          name: Deploy API Service
+          command: aws ecs update-service --force-new-deployment --cluster  pinning-node-cluster-dev  --service profile-api-service-dev
+
+  # Need seperate clusters if we have dev and prod, depends how we want to treat dev
+  deploy-prod:
+    working_directory: ~/3box-pinning-server
+    docker:
+      - image: circleci/python:3.7.1
+
+    steps:
+      - aws-cli/install
+      - aws-cli/configure
+      - run:
+          name: Deploy Pinning Service
+          command: aws ecs update-service --force-new-deployment --cluster pinning-node-cluster-prod  --service pinning-node-service-prod
+      - run:
+          name: Deploy API Service
+          command: aws ecs update-service --force-new-deployment --cluster pinning-node-cluster-prod  --service profile-api-service-prod
+
+workflows:
+  build-deploy:
+    jobs:
+      - test
+      - aws-ecr/build_and_push_image:
+          name: push-dev-image
+          repo: 3box-pinning-server
+          tag: develop
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+      - aws-ecr/build_and_push_image:
+          name: push-prod-image
+          repo: 3box-pinning-server
+          tag: latest
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - deploy-dev:
+          requires:
+            - push-dev-image
+          filters:
+            branches:
+              only: develop
+      - deploy-prod:
+          requires:
+            - push-prod-image
+          filters:
+            branches:
+              only: master
