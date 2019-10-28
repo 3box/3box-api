@@ -7,9 +7,10 @@ const CID = require('cids')
 const orbitDBCache = require('orbit-db-cache-redis')
 const path = require('path')
 const AccessControllers = require('orbit-db-access-controllers')
+const ThreadAccessController = require('./threadAccessRead.js')
 const {
   LegacyIPFS3BoxAccessController,
-  ThreadAccessController,
+  // ThreadAccessController,
   ModeratorAccessController
 } = require('3box-orbitdb-plugins')
 AccessControllers.addAccessController({ AccessController: LegacyIPFS3BoxAccessController })
@@ -69,15 +70,31 @@ class CacheService {
     const manifest = await io.read(this.ipfs, manifestHash)
     const dbType = manifest.type
     const acAddress = manifest.accessController
-    // If not thread then below, else resolve without opts
-    // Thread more difficult, AC requires orbit, need to load AC store same way as here, then pass mocked obj
-    const acOpts = address.includes('thread') ? {} :  {skipManifest: true, type: 'legacy-ipfs-3box', write:[]}
+    let acOpts
+
+    // TODO in refactor, this getDB code is pulled out, just do this in the thread AC implementation for this
+    if (address.includes('thread') && !address.includes('_access') ) {
+      const acManifest = await io.read(this.ipfs, acAddress.split('/')[2])
+      const acDBAddress = acManifest.params.address
+      const logIndex = await this.getDB(acDBAddress)
+      console.log(logIndex)
+      acOpts = {logIndex}
+    } else {
+      acOpts =  {skipManifest: true, type: 'legacy-ipfs-3box', write:[]}
+    }
+
     const accessController = await AccessControllers.resolve({'_ipfs': this.ipfs}, acAddress, acOpts)
+    console.log(accessController)
     const identity = await IdentityProvider.createIdentity({ id: 'peerid' })
     const localHeads = await cache.get('_localHeads')
     const remoteHeads = await cache.get('_remoteHeads')
     const amount = -1
-    // TODO build log from multiple heads and joins
+
+    // If not heads, then empy db
+    if (localHeads === null && remoteHeads === null) {
+      return dbType === 'feed' ? [] : {}
+    }
+    // TODO build log from multiple heads and joins or TODO from none
     const log = await Log.fromEntryHash(this.ipfs, identity, remoteHeads[0].hash, { logId: address, access: accessController, sortFn: undefined, length: amount})
 
     // get type build index
@@ -94,6 +111,7 @@ class CacheService {
     const { address, did, metadata } = req.query
     // let profileExisted
     const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
+    console.log(rootStoreAddress)
     const rootDB = await this.getDB(rootStoreAddress)
     const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
     if (!publicDBEntry) throw new Error('Profile db not found')
@@ -148,12 +166,16 @@ class CacheService {
 
   // TODO
   async getThread (req, res, next) {
-    // let { address, space, name, mod, members } = req.query
-    // address = '/orbitdb/zdpuArmcgrEguqBanZRZmnso14oEbFEEBFAr4MSfBZjLtATmR/3box.thread.myspace.mythread'
-    // const thread = await this.getDB(address)
-    // console.log(thread)
-    // res.json(thread)
-    // const usingConfig = (space && name && mod && members)
+    let { address, space, name, mod, members } = req.query
+    // console.log(space)
+    // console.log(name)
+    // console.log(mod)
+    // console.log(members)
+    console.log(address)
+    const usingConfig = !!(space && name && mod && members)
+    console.log(usingConfig)
+    const thread = await this.getDB(address)
+    res.json(thread)
   }
 
   async ethereumToRootStoreAddress (address) {
