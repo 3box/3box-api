@@ -3,6 +3,7 @@ const axios = require('axios')
 const Util = require('./util')
 const { InvalidInputError, ProfileNotFound } = require('./errors')
 const OrbitDBAddress = require('orbit-db/src/orbit-db-address')
+const createDBManifest = require('orbit-db/src/db-manifest')
 const CID = require('cids')
 const orbitDBCache = require('orbit-db-cache-redis')
 const path = require('path')
@@ -23,7 +24,6 @@ const IdentityProvider = require('orbit-db-identity-provider')
 // Store index
 const kvStoreIndex = require('orbit-db-kvstore/src/KeyValueIndex.js')
 const feedStoreIndex = require('orbit-db-feedstore/src/FeedIndex.js')
-
 
 const dbTypeIndex = {
   keyvalue: kvStoreIndex,
@@ -84,7 +84,6 @@ class CacheService {
     }
 
     const accessController = await AccessControllers.resolve({'_ipfs': this.ipfs}, acAddress, acOpts)
-    console.log(accessController)
     const identity = await IdentityProvider.createIdentity({ id: 'peerid' })
     const localHeads = await cache.get('_localHeads')
     const remoteHeads = await cache.get('_remoteHeads')
@@ -103,7 +102,9 @@ class CacheService {
     index.updateIndex(log)
 
     return dbType === 'feed'
-        ? Object.keys(index._index).map(e => index._index[e].payload.value)
+    //TODO other api calls assuming parsed??
+        // ? Object.keys(index._index).map(e => index._index[e].payload.value)
+        ? Object.keys(index._index).map(e => index._index[e])
         : index._index
   }
 
@@ -164,18 +165,43 @@ class CacheService {
    res.json(this._mungeSpace(parsedSpace, metadata))
   }
 
-  // TODO
+  // TODO error handilng/missing params
   async getThread (req, res, next) {
     let { address, space, name, mod, members } = req.query
-    // console.log(space)
-    // console.log(name)
-    // console.log(mod)
-    // console.log(members)
-    console.log(address)
-    const usingConfig = !!(space && name && mod && members)
-    console.log(usingConfig)
-    const thread = await this.getDB(address)
+    members = members === 'true'
+    const usingConfig = !!(space && name && mod)
+    if (usingConfig) {
+      const fullName = namesTothreadName(space, name)
+      address = await this.getThreadAddress(fullName, mod, members)
+    }
+
+    const entries = await this.getDB(address)
+    const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
     res.json(thread)
+  }
+
+  async getThreadAddress (name, firstModerator, members) {
+    const dbModAc =  {
+      type: 'moderator-access',
+      firstModerator,
+      members
+    }
+    const dbModName = name + '/_access'
+    const dbModAcAddress = await AccessControllers.create({'_ipfs': this.ipfs}, dbModAc.type, dbModAc)
+    const dbModAcManifestHash = await createDBManifest(this.ipfs, dbModName, 'feed', dbModAcAddress, {})
+    const dbModAddress =  path.join('/orbitdb', dbModAcManifestHash, dbModName)
+
+    const accessController = {
+       type: 'thread-access',
+       threadName: name,
+       members,
+       firstModerator,
+       logIndex: [],
+       dbAddress: dbModAddress
+     }
+     const accessControllerAddress = await AccessControllers.create({'_ipfs': this.ipfs}, accessController.type, accessController, {logIndex: []})
+     const manifestHash = await createDBManifest(this.ipfs, name, 'feed', accessControllerAddress, {})
+     return path.join('/orbitdb', manifestHash, name)
   }
 
   async ethereumToRootStoreAddress (address) {

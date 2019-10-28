@@ -12,13 +12,13 @@ const isValid3ID = did => {
   if (!parts[0] === 'did' || !parts[1] === '3') return false
   return isIPFS.cid(parts[2])
 }
-
+// TODO should this extend our thread AC, less code? easier to mantain
 class ThreadAccessController extends EventEmitter{
-  constructor (orbitdb, ipfs, identity, firstModerator, logIndex, options) {
+  constructor (orbitdb, ipfs, identity, firstModerator, logIndex, dbAddress, options) {
     super()
-    console.log(firstModerator)
     this._orbitdb = orbitdb
-    this._db = null
+    this._db = {}
+    this._db.address = dbAddress
     this._options = options || {}
     this._ipfs = ipfs
     this._members = Boolean(options.members)
@@ -99,7 +99,7 @@ class ThreadAccessController extends EventEmitter{
   /* Factory */
   static async create (orbitdb, options = {}) {
     if (!options.firstModerator) throw new Error('Thread AC: firstModerator required')
-    const ac = new ThreadAccessController(orbitdb, orbitdb._ipfs, options.identity, options.firstModerator, options.logIndex, options)
+    const ac = new ThreadAccessController(orbitdb, orbitdb._ipfs, options.identity, options.firstModerator, options.logIndex, options.dbAddress, options)
     // await ac.load(options.address || options.threadName)
     ac._updateCapabilites()
     return ac
