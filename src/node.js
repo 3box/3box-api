@@ -7,7 +7,7 @@ const { RedisCache, NullCache } = require('./cache')
 const CacheService = require('./cacheService')
 const analytics = require('./analytics')
 const Ipld = require('ipld')
-// const IpfsRepo = require('ipfs-repo')
+const ipfsRead = require('./ipfs')
 const IpfsBlockService = require('ipfs-block-service')
 const orbitDBCache = require('orbit-db-cache-redis')
 
@@ -45,13 +45,18 @@ async function createIPFSRepo () {
   return repo
 }
 
-async function start () {
-  const cache = REDIS_PATH ? new RedisCache({ host: REDIS_PATH }, DAYS15) : new NullCache()
+async function createIPFSRead () {
   const repo = await createIPFSRepo()
   const blockService = new IpfsBlockService(repo)
   const ipld = new Ipld({blockService: blockService})
+  return ipfsRead(ipld)
+}
+
+async function start () {
+  const cache = REDIS_PATH ? new RedisCache({ host: REDIS_PATH }, DAYS15) : new NullCache()
+  const ipfs = await createIPFSRead()
   const orbitCache = orbitDBCache({ host: ORBIT_REDIS_PATH })
-  const cacheService = new CacheService(ipld, orbitCache, ADDRESS_SERVER_URL)
+  const cacheService = new CacheService(ipfs, orbitCache, ADDRESS_SERVER_URL)
   cacheService.start()
 }
 

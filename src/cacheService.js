@@ -11,13 +11,11 @@ const AccessControllers = require('orbit-db-access-controllers')
 const ThreadAccessController = require('./threadAccessRead.js')
 const {
   LegacyIPFS3BoxAccessController,
-  // ThreadAccessController,
   ModeratorAccessController
 } = require('3box-orbitdb-plugins')
 AccessControllers.addAccessController({ AccessController: LegacyIPFS3BoxAccessController })
 AccessControllers.addAccessController({ AccessController: ThreadAccessController })
 AccessControllers.addAccessController({ AccessController: ModeratorAccessController })
-const ipfsMock = require('./ipfs')
 const io = require('orbit-db-io')
 const Log = require('ipfs-log')
 const IdentityProvider = require('orbit-db-identity-provider')
@@ -34,12 +32,11 @@ const dbTypeIndex = {
 const namesTothreadName = (spaceName, threadName) => `3box.thread.${spaceName}.${threadName}`
 
 class CacheService {
-  constructor (ipld, orbitCache, addressServer) {
-    this.ipld = ipld
+  constructor (ipfs, orbitCache, addressServer) {
     // this.cache = cache
     this.orbitCache = orbitCache
     this.addressServer = addressServer
-    this.ipfs = ipfsMock(this.ipld)
+    this.ipfs = ipfs
     // this.analytics = analytics
     this.app = express()
     this.app.use(express.json())
@@ -62,7 +59,7 @@ class CacheService {
     server.keepAliveTimeout = 60 * 1000
   }
 
-  async getDB (address) {
+  async getDB (address, threadMetaData = false) {
     const dbAddress = OrbitDBAddress.parse(address)
     const cache = await this.orbitCache.load(null, dbAddress)
     const manifestHash = await cache.get(path.join(dbAddress.toString(), '_manifest'))
@@ -101,11 +98,12 @@ class CacheService {
     const index = new dbTypeIndex[dbType]()
     index.updateIndex(log)
 
-    return dbType === 'feed'
-    //TODO other api calls assuming parsed??
-        // ? Object.keys(index._index).map(e => index._index[e].payload.value)
-        ? Object.keys(index._index).map(e => index._index[e])
-        : index._index
+    if (dbType === 'feed') {
+      const i = e => index._index[e]
+      const mapFunc = threadMetaData ? e => i(e) : e => i(e).payload.value
+      return Object.keys(index._index).map(mapFunc)
+    }
+    return index._index
   }
 
   async getProfile (req, res, next) {
@@ -175,7 +173,7 @@ class CacheService {
       address = await this.getThreadAddress(fullName, mod, members)
     }
 
-    const entries = await this.getDB(address)
+    const entries = await this.getDB(address, true)
     const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
     res.json(thread)
   }
