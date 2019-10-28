@@ -29,39 +29,30 @@ const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY
 const analyticsClient = analytics(SEGMENT_WRITE_KEY, ANALYTICS_ACTIVE)
 const orbitCacheRedisOpts = ORBIT_REDIS_PATH ? { host: ORBIT_REDIS_PATH } : null
 
-function createIPFSRepo () {
+async function createIPFSRepo () {
   if (!IPFS_PATH || !AWS_BUCKET_NAME) {
     throw new Error('Invalid IPFS + s3 configuration')
   }
-
   const repo = ipfsRepo({
     path: IPFS_PATH,
     bucket: AWS_BUCKET_NAME,
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY
   })
+  await repo.init({})
+  await repo.open()
+
   return repo
 }
 
 async function start () {
   const cache = REDIS_PATH ? new RedisCache({ host: REDIS_PATH }, DAYS15) : new NullCache()
-  const repo = createIPFSRepo()
-  repo.init({}, (err) => {
-    if (err) {
-      console.log(err)
-    }
-    repo.open((err) => {
-      if (err) {
-        console.log(err)
-      }
-      const blockService = new IpfsBlockService(repo)
-      const ipld = new Ipld({blockService: blockService})
-      const orbitCache = orbitDBCache({ host: ORBIT_REDIS_PATH })
-
-      const cacheService = new CacheService(ipld, orbitCache, ADDRESS_SERVER_URL)
-      cacheService.start()
-    })
-  })
+  const repo = await createIPFSRepo()
+  const blockService = new IpfsBlockService(repo)
+  const ipld = new Ipld({blockService: blockService})
+  const orbitCache = orbitDBCache({ host: ORBIT_REDIS_PATH })
+  const cacheService = new CacheService(ipld, orbitCache, ADDRESS_SERVER_URL)
+  cacheService.start()
 }
 
 start()

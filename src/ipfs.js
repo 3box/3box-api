@@ -5,7 +5,6 @@ const ipfs = (ipld) => ({
       return { value: obj }
     }
   }
-
 })
 
 module.exports = ipfs
