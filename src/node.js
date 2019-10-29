@@ -9,7 +9,7 @@ const analytics = require('./analytics')
 const Ipld = require('ipld')
 const ipfsRead = require('./ipfs')
 const IpfsBlockService = require('ipfs-block-service')
-const orbitDBCache = require('orbit-db-cache-redis')
+const OrbitDBRedisCache = require('./orbitdbCache')
 
 const env = process.env.NODE_ENV || 'development'
 require('dotenv').config({ path: path.resolve(process.cwd(), `.env.${env}`) })
@@ -55,7 +55,7 @@ async function createIPFSRead () {
 async function start () {
   const cache = REDIS_PATH ? new RedisCache({ host: REDIS_PATH }, DAYS15) : new NullCache()
   const ipfs = await createIPFSRead()
-  const orbitCache = orbitDBCache({ host: ORBIT_REDIS_PATH })
+  const orbitCache = new OrbitDBRedisCache(ORBIT_REDIS_PATH)
   const api = new APIService(ipfs, orbitCache, ADDRESS_SERVER_URL)
   api.start()
 }
