@@ -3,7 +3,8 @@ const axios = require('axios')
 const Util = require('./util')
 const { InvalidInputError, ProfileNotFound } = require('./errors')
 const orbitDBCache = require('orbit-db-cache-redis')
-const { readDB, getThreadAddress } = require('./orbitdb.js')
+// const { readDB, getThreadAddress } = require('./orbitdb.js')
+const OrbitDBRead = require('./orbitdb.js')
 const namesTothreadName = (spaceName, threadName) => `3box.thread.${spaceName}.${threadName}`
 
 class APIService {
@@ -25,6 +26,8 @@ class APIService {
     this.app.get('/list-spaces', this.listSpaces.bind(this))
     // this.app.get('/config', this.getConfig.bind(this))
     this.app.get('/thread', this.getThread.bind(this))
+
+    this.orbitdb = new OrbitDBRead(orbitCache, ipfs)
   }
 
   start () {
@@ -39,18 +42,18 @@ class APIService {
     // let profileExisted
     const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
     console.log(rootStoreAddress)
-    const rootDB = await readDB(this.orbitCache, this.ipfs, rootStoreAddress)
+    const rootDB = await this.orbitdb.readDB(rootStoreAddress)
     const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
     if (!publicDBEntry) throw new Error('Profile db not found')
     const publicDBAddress = publicDBEntry.odbAddress
-    const publicDB = await readDB(this.orbitCache, this.ipfs, publicDBAddress)
+    const publicDB = await this.orbitdb.readDB(publicDBAddress)
     res.json(this._mungeProfile(publicDB))
   }
 
   async listSpaces (req, res, next) {
     const { address, did } = req.query
     const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-    const rootDB = await readDB(this.orbitCache, this.ipfs, rootStoreAddress)
+    const rootDB = await this.orbitdb.readDB(rootStoreAddress)
     const spaces = rootDB.reduce((list, entry) => {
       if (!entry.odbAddress) return list
       const name = entry.odbAddress.split('.')[2]
@@ -71,14 +74,14 @@ class APIService {
    const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
    // await this.pinning.getSpace(rootStoreAddress, spaceName)
 
-   const rootDB = await readDB(this.orbitCache, this.ipfs, rootStoreAddress)
+   const rootDB = await this.orbitdb.readDB(rootStoreAddress)
    const spaceEntry = rootDB.find(entry => {
      if (!entry.odbAddress) return false
      return entry.odbAddress.split('.')[2] === spaceName
    })
    if (!spaceEntry) throw new Error('Space does not exist')
    const spaceAddress = spaceEntry.odbAddress
-   const spaceDB = await readDB(this.orbitCache, this.ipfs, spaceAddress)
+   const spaceDB = await this.orbitdb.readDB(spaceAddress)
 
    const parsedSpace = Object.keys(spaceDB).reduce((obj, key) => {
      if (key.startsWith('pub_')) {
@@ -98,11 +101,10 @@ class APIService {
     const usingConfig = !!(space && name && mod)
     if (usingConfig) {
       const fullName = namesTothreadName(space, name)
-      address = await getThreadAddress(this.ipfs, fullName, mod, members)
-      console.log(address)
+      address = await this.orbitdb.getThreadAddress(fullName, mod, members)
     }
 
-    const entries = await readDB(this.orbitCache, this.ipfs, address, true)
+    const entries = await this.orbitdb.readDB(address, true)
     const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
     res.json(thread)
   }

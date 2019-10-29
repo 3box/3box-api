@@ -7,7 +7,6 @@ class ThreadAccessReadController extends ThreadAccessController{
     this._readDB = options.readDB
     this._db = { address: options.dbAddress }
     this._acAddress = options.acAddress
-    this._orbitCache = options.orbitCache
     this._acList = []
   }
 
@@ -27,7 +26,7 @@ class ThreadAccessReadController extends ThreadAccessController{
   async _loadACdb () {
     const acManifest = await io.read(this._ipfs, this._acAddress.split('/')[2])
     const acDBAddress = acManifest.params.address
-    this._acList = await this._readDB(this._orbitCache, this._ipfs, acDBAddress)
+    this._acList = await this._readDB(acDBAddress)
   }
 
   async close () { }

@@ -22,60 +22,70 @@ AccessControllers.addAccessController({ AccessController: LegacyIPFS3BoxAccessCo
 AccessControllers.addAccessController({ AccessController: ThreadAccessController })
 AccessControllers.addAccessController({ AccessController: ModeratorAccessController })
 
+const amount = -1
+const nullIdentity = {}
 
- async function readDB (orbitCache, ipfs, address, threadMetaData = false) {
-  const cache = await orbitCache.load(address)
-  const manifestHash = await cache.getManifest()
-  if (!manifestHash) return null
-  const manifest = await io.read(ipfs, manifestHash)
-  const dbType = manifest.type
-  const acAddress = manifest.accessController
-
-  let acOpts
-  if (address.includes('thread') && !address.includes('_access') ) {
-    acOpts = { orbitCache, acAddress, readDB}
-  } else {
-    acOpts =  {skipManifest: true, type: 'legacy-ipfs-3box', write:[]}
+class OrbitDBRead {
+  constructor (orbitCache, ipfs) {
+    this._orbitCache = orbitCache
+    this._ipfs = ipfs
   }
 
-  const accessController = await AccessControllers.resolve({'_ipfs': ipfs}, acAddress, acOpts)
-  const identity = await IdentityProvider.createIdentity({ id: 'peerid' })
-  const heads = await cache.getHeads()
-  const amount = -1
+  async readDB (address, threadMetaData = false) {
+   const cache = await this._orbitCache.load(address)
+   const heads = await cache.getHeads()
 
-  // If not heads, then empy db
-  if (heads.length == 0) return dbType === 'feed' ? [] : {}
+   const manifestHash = await cache.getManifest()
+   if (!manifestHash) return null
+   const manifest = await io.read(this._ipfs, manifestHash)
+   const dbType = manifest.type
+   const acAddress = manifest.accessController
 
-  // TODO build log from multiple heads and joins or TODO from none
-  const log = await Log.fromEntryHash(ipfs, identity, heads[0].hash, { logId: address, access: accessController, sortFn: undefined, length: amount})
+   // if no heads, quickly return with empty db
+   if (heads.length == 0) return dbType === 'feed' ? [] : {}
 
-  // get type build index
-  if (!dbTypeIndex[dbType]) throw new Error('Type not supported')
-  const index = new dbTypeIndex[dbType]()
-  index.updateIndex(log)
+   let acOpts
+   if (address.includes('thread') && !address.includes('_access') ) {
+     acOpts = { acAddress, readDB: this.readDB.bind(this)}
+   } else {
+     acOpts =  {skipManifest: true, type: 'legacy-ipfs-3box', write:[]}
+   }
 
-  if (dbType === 'feed') {
-    const i = e => index._index[e]
-    const mapFunc = threadMetaData ? e => i(e) : e => i(e).payload.value
-    return Object.keys(index._index).map(mapFunc)
-  }
+   const accessController = await AccessControllers.resolve({'_ipfs': this._ipfs}, acAddress, acOpts)
 
-  return index._index
-}
+   // TODO build log from multiple heads and joins or TODO from none
+   const log = await Log.fromEntryHash(this._ipfs, nullIdentity, heads[0].hash, { logId: address, access: accessController, sortFn: undefined, length: amount})
 
-async function getThreadAddress (ipfs, name, moderator, members) {
-  const modAC = moderatorAC(moderator, members)
-  const dbModName = `${name}/_access`
-  const acDBAddress = await dbAddress (ipfs, modAC, dbModName, 'feed')
+   // Get overlay db type to build db index
+   if (!dbTypeIndex[dbType]) throw new Error('Type not supported')
+   const index = new dbTypeIndex[dbType]()
+   index.updateIndex(log)
 
-  const ac = threadAC (name, moderator, members, acDBAddress)
-  return dbAddress(ipfs, ac, name, 'feed')
-}
+   // Map db index to typical return all form
+   if (dbType === 'feed') {
+     const entry = k => index._index[k]
+     const mapFunc = threadMetaData ? k => entry(k) : k => entry(k).payload.value
+     return Object.keys(index._index).map(mapFunc)
+   }
 
-async function dbAddress (ipfs, accessController, dbName, dbType) {
-  const accessControllerAddress = await AccessControllers.create({'_ipfs': ipfs}, accessController.type, accessController)
-  const manifestHash = await createDBManifest(ipfs, dbName, dbType, accessControllerAddress, {})
-  return path.join('/orbitdb', manifestHash, dbName)
+   return index._index
+ }
+
+ async getThreadAddress (name, moderator, members) {
+   const modAC = moderatorAC(moderator, members)
+   const dbModName = `${name}/_access`
+   const acDBAddress = await this.dbAddress (modAC, dbModName, 'feed')
+
+   const ac = threadAC (name, moderator, members, acDBAddress)
+   return this.dbAddress(ac, name, 'feed')
+ }
+
+ async dbAddress (accessController, dbName, dbType) {
+   const accessControllerAddress = await AccessControllers.create({'_ipfs': this._ipfs}, accessController.type, accessController)
+   const manifestHash = await createDBManifest(this._ipfs, dbName, dbType, accessControllerAddress, {})
+   return path.join('/orbitdb', manifestHash, dbName)
+ }
+
 }
 
 function moderatorAC (moderator, members) {
@@ -97,4 +107,4 @@ function threadAC (name, moderator, members, acDBAddress) {
    }
 }
 
-module.exports = { readDB, getThreadAddress }
+module.exports = OrbitDBRead
