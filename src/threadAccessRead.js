@@ -1,17 +1,20 @@
 const { ThreadAccessController } = require('3box-orbitdb-plugins')
+const io = require('orbit-db-io')
 
-// TODO document, logIndex is the feed of the underlying AC db list
 class ThreadAccessReadController extends ThreadAccessController{
-  constructor (orbitdb, ipfs, identity, firstModerator, logIndex, dbAddress, options = {}) {
+  constructor (orbitdb, ipfs, identity, firstModerator, options = {}) {
     super(orbitdb, ipfs, identity, firstModerator, options)
-    this._db = { address: dbAddress }
-    this._logIndex = logIndex
+    this._readDB = options.readDB
+    this._db = { address: options.dbAddress }
+    this._acAddress = options.acAddress
+    this._orbitCache = options.orbitCache
+    this._acList = []
   }
 
   _updateCapabilites () {
     let moderators = [], members = []
     moderators.push(this._firstModerator)
-    Object.entries(this._logIndex).forEach(entry => {
+    Object.entries(this._acList).forEach(entry => {
       const capability = entry[1].payload.value.capability
       const id = entry[1].payload.value.id
       if (capability === MODERATOR) moderators.push(id)
@@ -21,13 +24,22 @@ class ThreadAccessReadController extends ThreadAccessController{
     return this._capabilities
   }
 
+  async _loadACdb () {
+    const acManifest = await io.read(this._ipfs, this._acAddress.split('/')[2])
+    const acDBAddress = acManifest.params.address
+    this._acList = await this._readDB(this._orbitCache, this._ipfs, acDBAddress)
+  }
+
   async close () { }
 
-  async load (address) {}
+  async load (address) { }
 
   static async create (orbitdb, options = {}) {
-    const ac = new ThreadAccessReadController(orbitdb, orbitdb._ipfs, options.identity, options.firstModerator, options.logIndex, options.dbAddress, options)
-    ac._updateCapabilites()
+    const ac = new ThreadAccessReadController(orbitdb, orbitdb._ipfs, options.identity, options.firstModerator, options)
+    if (!options.manifestOnly) {
+      await ac._loadACdb()
+      ac._updateCapabilites()
+    }
     return ac
   }
 }

@@ -30,14 +30,10 @@ AccessControllers.addAccessController({ AccessController: ModeratorAccessControl
   const manifest = await io.read(ipfs, manifestHash)
   const dbType = manifest.type
   const acAddress = manifest.accessController
-  let acOpts
 
-  // TODO in refactor, this getDB code is pulled out, just do this in the thread AC implementation for this
+  let acOpts
   if (address.includes('thread') && !address.includes('_access') ) {
-    const acManifest = await io.read(ipfs, acAddress.split('/')[2])
-    const acDBAddress = acManifest.params.address
-    const logIndex = await readDB(orbitCache, ipfs, acDBAddress)
-    acOpts = {logIndex}
+    acOpts = { orbitCache, acAddress, readDB}
   } else {
     acOpts =  {skipManifest: true, type: 'legacy-ipfs-3box', write:[]}
   }
@@ -48,9 +44,8 @@ AccessControllers.addAccessController({ AccessController: ModeratorAccessControl
   const amount = -1
 
   // If not heads, then empy db
-  if (heads.length == 0) {
-    return dbType === 'feed' ? [] : {}
-  }
+  if (heads.length == 0) return dbType === 'feed' ? [] : {}
+
   // TODO build log from multiple heads and joins or TODO from none
   const log = await Log.fromEntryHash(ipfs, identity, heads[0].hash, { logId: address, access: accessController, sortFn: undefined, length: amount})
 
@@ -64,31 +59,42 @@ AccessControllers.addAccessController({ AccessController: ModeratorAccessControl
     const mapFunc = threadMetaData ? e => i(e) : e => i(e).payload.value
     return Object.keys(index._index).map(mapFunc)
   }
+
   return index._index
 }
 
-async function getThreadAddress (ipfs, name, firstModerator, members) {
-  const dbModAc =  {
-    type: 'moderator-access',
-    firstModerator,
-    members
-  }
-  const dbModName = name + '/_access'
-  const dbModAcAddress = await AccessControllers.create({'_ipfs': ipfs}, dbModAc.type, dbModAc)
-  const dbModAcManifestHash = await createDBManifest(ipfs, dbModName, 'feed', dbModAcAddress, {})
-  const dbModAddress =  path.join('/orbitdb', dbModAcManifestHash, dbModName)
+async function getThreadAddress (ipfs, name, moderator, members) {
+  const modAC = moderatorAC(moderator, members)
+  const dbModName = `${name}/_access`
+  const acDBAddress = await dbAddress (ipfs, modAC, dbModName, 'feed')
 
-  const accessController = {
+  const ac = threadAC (name, moderator, members, acDBAddress)
+  return dbAddress(ipfs, ac, name, 'feed')
+}
+
+async function dbAddress (ipfs, accessController, dbName, dbType) {
+  const accessControllerAddress = await AccessControllers.create({'_ipfs': ipfs}, accessController.type, accessController)
+  const manifestHash = await createDBManifest(ipfs, dbName, dbType, accessControllerAddress, {})
+  return path.join('/orbitdb', manifestHash, dbName)
+}
+
+function moderatorAC (moderator, members) {
+  return {
+      type: 'moderator-access',
+      firstModerator: moderator,
+      members
+    }
+}
+
+function threadAC (name, moderator, members, acDBAddress) {
+  return {
      type: 'thread-access',
      threadName: name,
      members,
-     firstModerator,
-     logIndex: [],
-     dbAddress: dbModAddress
+     firstModerator: moderator,
+     manifestOnly: true,
+     dbAddress: acDBAddress
    }
-   const accessControllerAddress = await AccessControllers.create({'_ipfs': ipfs}, accessController.type, accessController, {logIndex: []})
-   const manifestHash = await createDBManifest(ipfs, name, 'feed', accessControllerAddress, {})
-   return path.join('/orbitdb', manifestHash, name)
 }
 
 module.exports = { readDB, getThreadAddress }
