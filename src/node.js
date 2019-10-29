@@ -4,7 +4,7 @@ const argv = require('yargs').argv
 const path = require('path')
 const { ipfsRepo } = require('./s3')
 const { RedisCache, NullCache } = require('./cache')
-const CacheService = require('./cacheService')
+const APIService = require('./APIService')
 const analytics = require('./analytics')
 const Ipld = require('ipld')
 const ipfsRead = require('./ipfs')
@@ -56,8 +56,8 @@ async function start () {
   const cache = REDIS_PATH ? new RedisCache({ host: REDIS_PATH }, DAYS15) : new NullCache()
   const ipfs = await createIPFSRead()
   const orbitCache = orbitDBCache({ host: ORBIT_REDIS_PATH })
-  const cacheService = new CacheService(ipfs, orbitCache, ADDRESS_SERVER_URL)
-  cacheService.start()
+  const api = new APIService(ipfs, orbitCache, ADDRESS_SERVER_URL)
+  api.start()
 }
 
 start()
