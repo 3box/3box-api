@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`APIService GET /profile respond json to address with profile 1`] = `
+Object {
+  "a": "a",
+  "b": "b",
+  "c": "c",
+  "d": "d",
+  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+}
+`;
+
+exports[`APIService GET /profile respond json to address with profile and metadata option 1`] = `
+Object {
+  "a": "a",
+  "b": "b",
+  "c": "c",
+  "d": "d",
+  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+}
+`;
+
+exports[`APIService GET /space respond json to space (by address) that exists 1`] = `
+Object {
+  "a": "a",
+  "b": "b",
+  "c": "c",
+  "d": "d",
+  "thread-/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread": Object {
+    "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+    "firstModerator": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "members": false,
+    "name": "3box.thread.api.thread",
+  },
+}
+`;
+
+exports[`APIService GET /space respond json to space that exists 1`] = `
+Object {
+  "a": "a",
+  "b": "b",
+  "c": "c",
+  "d": "d",
+  "thread-/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread": Object {
+    "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+    "firstModerator": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "members": false,
+    "name": "3box.thread.api.thread",
+  },
+}
+`;
+
+exports[`APIService GET /thread respond json to thread by address that exists 1`] = `
+Array [
+  Object {
+    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "message": "a",
+    "postId": "zdpuAoKx6NKUG3S86M7NFFP2kBXUXeFY3dFahzQDXtod9gqwz",
+    "timestamp": 1572284917,
+  },
+  Object {
+    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "message": "b",
+    "postId": "zdpuB1jbNgQvKdkp223uBnkCjmPVESLXPLtfEkNx3DZGMDb3S",
+    "timestamp": 1572461635,
+  },
+  Object {
+    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "message": "c",
+    "postId": "zdpuAnF3Ph9bhikC7mfgZKCS59oCssmhout8xWQZti9vC5q9W",
+    "timestamp": 1572461638,
+  },
+]
+`;
