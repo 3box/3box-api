@@ -350,11 +350,54 @@ describe('APIService', async () => {
   })
 
   describe('GET /config', () => {
-
-
-    it('should ', async () => {
-
+    it('respond json to address with 3box', async function(done) {
+      request(app)
+        .get('/config?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          done()
+        })
     })
+
+    it('respond json to DID with 3box', async function(done) {
+      request(app)
+        .get('/config?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond 404 to address with no 3box', async function(done) {
+      request(app)
+        .get('/config?address=0xD72e013d96f97412d524CaCB9AEfA885598E28d6')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          done()
+        })
+    })
+
+    //TODO too slow without local resolution
+    // it('respond 404 to did with no 3box', async function(done) {
+    //   request(app)
+    //     .get('/config?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
+    //     .set('Accept', 'application/json')
+    //     .expect('Content-Type', /json/)
+    //     .expect(200)
+    //     .then(response => {
+    //       expect(response.body).toMatchSnapshot()
+    //       done()
+    //     })
+    // })
   })
 
   describe('POST /profileList', () => {

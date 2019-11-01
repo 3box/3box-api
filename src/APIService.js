@@ -9,6 +9,12 @@ const namesTothreadName = (spaceName, threadName) => `3box.thread.${spaceName}.$
 const { resolveDID } = require('./util')
 const registerMuportResolver = require('muport-did-resolver')
 const register3idResolver = require('3id-resolver')
+const io = require('orbit-db-io')
+
+const rootEntryTypes = {
+  SPACE: 'space',
+  ADDRESS_LINK: 'address-link'
+}
 
 
 class APIService {
@@ -28,7 +34,7 @@ class APIService {
     // this.app.post('/profileList', this.getProfiles.bind(this))
     this.app.get('/space', this.getSpace.bind(this))
     this.app.get('/list-spaces', this.listSpaces.bind(this))
-    // this.app.get('/config', this.getConfig.bind(this))
+    this.app.get('/config', this.getConfig.bind(this))
     this.app.get('/thread', this.getThread.bind(this))
 
     this.orbitdb = new OrbitDBRead(orbitCache, ipfs)
@@ -55,7 +61,6 @@ class APIService {
       const publicDB = await this.orbitdb.readDB(publicDBAddress)
       res.json(this._mungeProfile(publicDB))
     } catch (e) {
-      console.log(e)
       return errorToResponse(res, e, 'Error: Failed to load profile')
     }
   }
@@ -127,6 +132,35 @@ class APIService {
     if (!entries) return res.json([])
     const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
     res.json(thread)
+  }
+
+  async getConfig (req, res, next) {
+    const { address, did } = req.query
+
+    try {
+      const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
+      const entries = await this.orbitdb.readDB(rootStoreAddress, true)
+      let conf = {}
+
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i]
+        const value = entry.payload.value
+        if (value.type === rootEntryTypes.SPACE) {
+          if (!conf.spaces) conf.spaces = {}
+          const name = value.odbAddress.split('.')[2]
+          conf.spaces[name] = {
+            DID: value.DID
+          }
+        } else if (value.type === rootEntryTypes.ADDRESS_LINK) {
+          if (!conf.links) conf.links = []
+          const obj = await io.read(this.ipfs, value.data)
+          conf.links.push(obj)
+        }
+      }
+      res.json(conf)
+    } catch (e) {
+      return errorToResponse(res, e, 'Error: Failed to load config')
+    }
   }
 
   async ethereumToRootStoreAddress (address) {
