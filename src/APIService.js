@@ -6,6 +6,10 @@ const orbitDBCache = require('orbit-db-cache-redis')
 // const { readDB, getThreadAddress } = require('./orbitdb.js')
 const OrbitDBRead = require('./orbitdb.js')
 const namesTothreadName = (spaceName, threadName) => `3box.thread.${spaceName}.${threadName}`
+const { resolveDID } = require('./util')
+const registerMuportResolver = require('muport-did-resolver')
+const register3idResolver = require('3id-resolver')
+
 
 class APIService {
   constructor (ipfs, orbitCache, addressServer) {
@@ -28,6 +32,10 @@ class APIService {
     this.app.get('/thread', this.getThread.bind(this))
 
     this.orbitdb = new OrbitDBRead(orbitCache, ipfs)
+
+    // TODO pass IPFS, but need to mock diff funcs to map to s3
+    registerMuportResolver()
+    register3idResolver()
   }
 
   start () {
@@ -39,28 +47,34 @@ class APIService {
 
   async getProfile (req, res, next) {
     const { address, did, metadata } = req.query
-    // let profileExisted
-    const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-    console.log(rootStoreAddress)
-    const rootDB = await this.orbitdb.readDB(rootStoreAddress)
-    const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
-    if (!publicDBEntry) throw new Error('Profile db not found')
-    const publicDBAddress = publicDBEntry.odbAddress
-    const publicDB = await this.orbitdb.readDB(publicDBAddress)
-    res.json(this._mungeProfile(publicDB))
+    try {
+      const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
+      const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+      const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
+      const publicDBAddress = publicDBEntry.odbAddress
+      const publicDB = await this.orbitdb.readDB(publicDBAddress)
+      res.json(this._mungeProfile(publicDB))
+    } catch (e) {
+      console.log(e)
+      return errorToResponse(res, e, 'Error: Failed to load profile')
+    }
   }
 
   async listSpaces (req, res, next) {
     const { address, did } = req.query
-    const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-    const rootDB = await this.orbitdb.readDB(rootStoreAddress)
-    const spaces = rootDB.reduce((list, entry) => {
-      if (!entry.odbAddress) return list
-      const name = entry.odbAddress.split('.')[2]
-      if (name) list.push(name)
-      return list
-    }, [])
-    res.json(spaces)
+    try {
+      const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
+      const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+      const spaces = rootDB.reduce((list, entry) => {
+        if (!entry.odbAddress) return list
+        const name = entry.odbAddress.split('.')[2]
+        if (name) list.push(name)
+        return list
+      }, [])
+      res.json(spaces)
+    } catch (e) {
+      return errorToResponse(res, e, 'Error: Failed to load spaces')
+    }
   }
 
   _mungeSpace (space, metadata) {
@@ -70,28 +84,31 @@ class APIService {
   async getSpace (req, res, next) {
     const { address, did, metadata } = req.query
     const spaceName = req.query.name
-    // let spaceExisted
-   const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-   // await this.pinning.getSpace(rootStoreAddress, spaceName)
+    try {
+       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
+       // await this.pinning.getSpace(rootStoreAddress, spaceName)
 
-   const rootDB = await this.orbitdb.readDB(rootStoreAddress)
-   const spaceEntry = rootDB.find(entry => {
-     if (!entry.odbAddress) return false
-     return entry.odbAddress.split('.')[2] === spaceName
-   })
-   if (!spaceEntry) throw new Error('Space does not exist')
-   const spaceAddress = spaceEntry.odbAddress
-   const spaceDB = await this.orbitdb.readDB(spaceAddress)
+       const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+       const spaceEntry = rootDB.find(entry => {
+         if (!entry.odbAddress) return false
+         return entry.odbAddress.split('.')[2] === spaceName
+       })
+       if (!spaceEntry) return errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
+       const spaceAddress = spaceEntry.odbAddress
+       const spaceDB = await this.orbitdb.readDB(spaceAddress)
 
-   const parsedSpace = Object.keys(spaceDB).reduce((obj, key) => {
-     if (key.startsWith('pub_')) {
-       const x = spaceDB[key]
-       const timestamp = Math.floor(x.timeStamp / 1000)
-       obj[key.slice(4)] = { value: x.value, timestamp }
+       const parsedSpace = Object.keys(spaceDB).reduce((obj, key) => {
+         if (key.startsWith('pub_')) {
+           const x = spaceDB[key]
+           const timestamp = Math.floor(x.timeStamp / 1000)
+           obj[key.slice(4)] = { value: x.value, timestamp }
+         }
+         return obj
+       }, {})
+       res.json(this._mungeSpace(parsedSpace, metadata))
+     } catch (e) {
+       return errorToResponse(res, e, 'Error: Failed to load space')
      }
-     return obj
-   }, {})
-   res.json(this._mungeSpace(parsedSpace, metadata))
   }
 
   // TODO error handilng/missing params
@@ -138,8 +155,12 @@ class APIService {
     }
   }
 
+  // TODO need to resolve these without pinning
   async didToRootStoreAddress (did) {
-    return Util.didToRootStoreAddress(did, this.pinning)
+    // TODO just change these args
+    return Util.didToRootStoreAddress(did, {ipfs: this.ipfs, orbitdb: {determineAddress: (name, type, opts) => {
+      return this.orbitdb.dbAddress(opts.accessController, name, type, opts.format)
+    }}})
   }
 
   async didToRootStoreAddresses (dids) {

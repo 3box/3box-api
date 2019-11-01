@@ -27,7 +27,7 @@ async function createS3Repo(path, bucketConfig) {
 
   const repo = ipfsRepo({
     path: path,
-    bucket: bucketConfig.name,
+    bucket: bucketConfig.bucket,
     accessKeyId: bucketConfig.accessKeyId,
     secretAccessKey: bucketConfig.secretAccessKey
   })
@@ -55,11 +55,21 @@ const ipfs = (ipld) => ({
     },
     // only hash, not write, TODO, could improve format handling
     put: async (node, options) => {
-      const cid = await ipld.put(node, multicodec.DAG_CBOR, {
-        hashAlg: multicodec.SHA2_256,
-        cidVersion: 1,
-        onlyHash: true
-      })
+      let cid
+      if (options.format === 'dag-pb') {
+        cid = await ipld.put(node, multicodec.DAG_PB, {
+          hashAlg: multicodec.SHA2_256,
+          cidVersion: 0,
+          onlyHash: true
+        })
+      } else {
+        cid = await ipld.put(node, multicodec.DAG_CBOR, {
+          hashAlg: multicodec.SHA2_256,
+          cidVersion: 1,
+          onlyHash: true
+        })
+      }
+
       return cid
     }
   }

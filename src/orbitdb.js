@@ -80,9 +80,9 @@ class OrbitDBRead {
    return this.dbAddress(ac, name, 'feed')
  }
 
- async dbAddress (accessController, dbName, dbType) {
+ async dbAddress (accessController, dbName, dbType, format) {
    const accessControllerAddress = await AccessControllers.create({'_ipfs': this._ipfs}, accessController.type, accessController)
-   const manifestHash = await createDBManifest(this._ipfs, dbName, dbType, accessControllerAddress, {})
+   const manifestHash = await createDBManifest(this._ipfs, dbName, dbType, accessControllerAddress, {format})
    return path.join('/orbitdb', manifestHash, dbName)
  }
 
