@@ -122,6 +122,9 @@ class APIService {
     }
 
     const entries = await this.orbitdb.readDB(address, true)
+
+    //NOTE could return error if not manifest file from readDB instead of empty, to indicate wrong args
+    if (!entries) return res.json([])
     const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
     res.json(thread)
   }

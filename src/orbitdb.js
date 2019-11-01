@@ -45,6 +45,7 @@ class OrbitDBRead {
    if (heads.length == 0) return dbType === 'feed' ? [] : {}
 
    let acOpts
+   // TODO handle case better, could have spaces called threads
    if (address.includes('thread') && !address.includes('_access') ) {
      acOpts = { acAddress, readDB: this.readDB.bind(this)}
    } else {
