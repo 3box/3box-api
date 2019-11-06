@@ -39,9 +39,8 @@ class APIService {
 
     this.orbitdb = new OrbitDBRead(orbitCache, ipfs)
 
-    // TODO pass IPFS, but need to mock diff funcs to map to s3
-    registerMuportResolver()
-    register3idResolver()
+    registerMuportResolver(this.ipfs)
+    register3idResolver(this.ipfs)
   }
 
   start () {

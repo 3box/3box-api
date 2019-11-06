@@ -4,6 +4,7 @@ const Ipld = require('ipld')
 const ipfsRead = require('./ipfs')
 const IpfsBlockService = require('ipfs-block-service')
 const Repo = require('ipfs-repo')
+const CID = require('cids')
 
 // A mock lock for fs ipfs repo, s3 includes mock lock already
 const notALock = {
@@ -47,32 +48,48 @@ async function createIPFSRead (repo) {
   return ipfs(ipld)
 }
 
-const ipfs = (ipld) => ({
-  dag: {
-    get: async (cid) => {
-      const obj = await ipld.get(cid)
-      return { value: obj }
-    },
-    // only hash, not write, TODO, could improve format handling
-    put: async (node, options) => {
-      let cid
-      if (options.format === 'dag-pb') {
-        cid = await ipld.put(node, multicodec.DAG_PB, {
-          hashAlg: multicodec.SHA2_256,
-          cidVersion: 0,
-          onlyHash: true
-        })
-      } else {
-        cid = await ipld.put(node, multicodec.DAG_CBOR, {
-          hashAlg: multicodec.SHA2_256,
-          cidVersion: 1,
-          onlyHash: true
-        })
-      }
+const ipfs = (ipld) => {
+  const dagGet = async (cid, isCAT) => {
+    const obj = await ipld.get(cid)
+    return { value: obj }
+  }
+  return {
+    dag: {
+      get: dagGet,
+      // only hash, not write, TODO, could improve format handling
+      put: async (node, options) => {
+        let cid
+        if (options.format === 'dag-pb') {
+          cid = await ipld.put(node, multicodec.DAG_PB, {
+            hashAlg: multicodec.SHA2_256,
+            cidVersion: 0,
+            onlyHash: true
+          })
+        } else {
+          cid = await ipld.put(node, multicodec.DAG_CBOR, {
+            hashAlg: multicodec.SHA2_256,
+            cidVersion: 1,
+            onlyHash: true
+          })
+        }
 
-      return cid
+        return cid
+      }
+    },
+    cat: async (ipfsHash) => {
+      const cid = new CID(ipfsHash)
+      const result = await dagGet(cid, true)
+      const dagNode = result.value
+      const buffString = dagNode.toJSON().data.toString()
+      // TODO what are the prefixes/suffixes encoding? format?
+      return buffString.substring(5, buffString.length-3)
+
+    },
+    pin: {
+      rm: () => {},
+      add: () => {}
     }
   }
-})
+}
 
 module.exports = { ipfs, createIPFSRead, createS3Repo, createRepo }
