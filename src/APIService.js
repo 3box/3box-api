@@ -16,26 +16,32 @@ const rootEntryTypes = {
   ADDRESS_LINK: 'address-link'
 }
 
-
 class APIService {
-  constructor (ipfs, orbitCache, addressServer) {
-    // this.cache = cache
+  constructor (ipfs, orbitCache, apiCache, analytics, addressServer) {
+    this.cache = apiCache
     this.orbitCache = orbitCache
+    this.analytics = analytics
     this.addressServer = addressServer
     this.ipfs = ipfs
-    // this.analytics = analytics
+
     this.app = express()
     this.app.use(express.json())
     this.app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*')
       next()
     })
+
     this.app.get('/profile', this.getProfile.bind(this))
     // this.app.post('/profileList', this.getProfiles.bind(this))
     this.app.get('/space', this.getSpace.bind(this))
     this.app.get('/list-spaces', this.listSpaces.bind(this))
     this.app.get('/config', this.getConfig.bind(this))
     this.app.get('/thread', this.getThread.bind(this))
+
+    // After response
+    this.app.use((req, res, next) => {
+      this.analytics.dispatch(res, req)
+    })
 
     this.orbitdb = new OrbitDBRead(orbitCache, ipfs)
 
@@ -50,18 +56,32 @@ class APIService {
     server.keepAliveTimeout = 60 * 1000
   }
 
+  async readDB (address) {
+    if (!this.cache) return this.orbitdb.readDB(address)
+    const cacheHit = await this.cache.read(address)
+    if (cacheHit) return cacheHit
+    const db = this.orbitdb.readDB(address)
+    this.cache.write(address, db)
+    return db
+  }
+
   async getProfile (req, res, next) {
     const { address, did, metadata } = req.query
+    let profile
     try {
       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
       const rootDB = await this.orbitdb.readDB(rootStoreAddress)
       const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
       const publicDBAddress = publicDBEntry.odbAddress
-      const publicDB = await this.orbitdb.readDB(publicDBAddress)
-      res.json(this._mungeProfile(publicDB))
+      profile = await this.orbitdb.readDB(publicDBAddress)
+      res.json(this._mungeProfile(profile))
     } catch (e) {
-      return errorToResponse(res, e, 'Error: Failed to load profile')
+      errorToResponse(res, e, 'Error: Failed to load profile')
     }
+
+    const profile_existed = profile && Object.entries(profile).length !== 0
+    res.analytics = { address, profile_existed }
+    next()
   }
 
   async listSpaces (req, res, next) {
@@ -77,8 +97,11 @@ class APIService {
       }, [])
       res.json(spaces)
     } catch (e) {
-      return errorToResponse(res, e, 'Error: Failed to load spaces')
+      errorToResponse(res, e, 'Error: Failed to load spaces')
     }
+
+    res.analytics = { address }
+    next()
   }
 
   _mungeSpace (space, metadata) {
@@ -88,10 +111,9 @@ class APIService {
   async getSpace (req, res, next) {
     const { address, did, metadata } = req.query
     const spaceName = req.query.name
+    let space
     try {
        const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-       // await this.pinning.getSpace(rootStoreAddress, spaceName)
-
        const rootDB = await this.orbitdb.readDB(rootStoreAddress)
        const spaceEntry = rootDB.find(entry => {
          if (!entry.odbAddress) return false
@@ -99,11 +121,11 @@ class APIService {
        })
        if (!spaceEntry) return errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
        const spaceAddress = spaceEntry.odbAddress
-       const spaceDB = await this.orbitdb.readDB(spaceAddress)
+       space = await this.orbitdb.readDB(spaceAddress)
 
-       const parsedSpace = Object.keys(spaceDB).reduce((obj, key) => {
+       const parsedSpace = Object.keys(space).reduce((obj, key) => {
          if (key.startsWith('pub_')) {
-           const x = spaceDB[key]
+           const x = space[key]
            const timestamp = Math.floor(x.timeStamp / 1000)
            obj[key.slice(4)] = { value: x.value, timestamp }
          }
@@ -111,8 +133,13 @@ class APIService {
        }, {})
        res.json(this._mungeSpace(parsedSpace, metadata))
      } catch (e) {
-       return errorToResponse(res, e, 'Error: Failed to load space')
+       errorToResponse(res, e, 'Error: Failed to load space')
      }
+
+     const spaceExisted = space && Object.entries(space).length !== 0
+     // TODO change existed key?
+     res.analytics = { address: address, name: spaceName, profile_existed: spaceExisted }
+     next()
   }
 
   // TODO error handilng/missing params
@@ -131,6 +158,9 @@ class APIService {
     if (!entries) return res.json([])
     const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
     res.json(thread)
+
+    res.analytics = { address }
+    next()
   }
 
   async getConfig (req, res, next) {
@@ -158,8 +188,11 @@ class APIService {
       }
       res.json(conf)
     } catch (e) {
-      return errorToResponse(res, e, 'Error: Failed to load config')
+      errorToResponse(res, e, 'Error: Failed to load config')
     }
+
+    res.analytics = { address }
+    next()
   }
 
   async ethereumToRootStoreAddress (address) {

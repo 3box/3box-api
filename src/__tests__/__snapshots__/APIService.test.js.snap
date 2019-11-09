@@ -72,6 +72,12 @@ Array [
 ]
 `;
 
+exports[`APIService GET /list-spaces respond json to address with profile 2`] = `
+Array [
+  "api",
+]
+`;
+
 exports[`APIService GET /profile respond 400 to missing required args 1`] = `
 Object {
   "message": "Either pass an \`address\` or \`did\` parameter",
@@ -134,6 +140,21 @@ Object {
 `;
 
 exports[`APIService GET /space respond 401 to missing args 1`] = `Object {}`;
+
+exports[`APIService GET /space respond 404 to space that does not exists 1`] = `
+Object {
+  "a": "a",
+  "b": "b",
+  "c": "c",
+  "d": "d",
+  "thread-/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread": Object {
+    "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+    "firstModerator": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "members": false,
+    "name": "3box.thread.api.thread",
+  },
+}
+`;
 
 exports[`APIService GET /space respond json to space (by address) that exists 1`] = `
 Object {

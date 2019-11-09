@@ -33,15 +33,6 @@ jest.mock('redis', () => {
   }
 })
 
-const analyticsMock = {
-  trackListSpaces: jest.fn(),
-  trackGetConfig: jest.fn(),
-  trackGetThread: jest.fn(),
-  trackGetSpace: jest.fn(),
-  trackGetProfile: jest.fn(),
-  trackGetProfiles: jest.fn()
-}
-
 describe('APIService', async () => {
   let app
 

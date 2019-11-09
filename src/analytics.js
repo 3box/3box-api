@@ -1,68 +1,47 @@
 const SegmentAnalytics = require('analytics-node')
+const Url = require('url-parse')
+const sha256 = require('js-sha256').sha256
 
-class Analytics {
+const hash = str => str === null ? null : Buffer.from(sha256.digest(str)).toString('hex')
+const domain = str => new Url(str).hostname
+
+const reqEventMap = {
+  '/profile': 'api_get_profile',
+  '/profileList': 'api_get_profiles',
+  '/space': 'api_get_space',
+  '/list-spaces': 'api_list_spaces',
+  '/config': 'api_get_config',
+  '/thread': 'api_get_thread'
+}
+
+class AnalyticsAPI {
   constructor (client) {
     this.client = client
   }
 
-  _track (data = {}) {
+  _track (data = {}, id) {
     if (this.client) {
-      data.anonymousId = '3box'
+      data.anonymousId = id || '3box'
       data.properties.time = Date.now()
       return this.client.track(data)
     } else {
       return false
     }
   }
-}
 
-class AnalyticsAPI extends Analytics {
-  trackListSpaces (address, status) {
-    let data = {}
-    data.event = 'api_list_spaces'
-    data.properties = { address: address, status }
-    this._track(data)
-  }
-
-  trackGetConfig (address, status) {
-    let data = {}
-    data.event = 'api_get_config'
-    data.properties = { address: address, status }
-    this._track(data)
-  }
-
-  trackGetThread (address, status) {
-    let data = {}
-    data.event = 'api_get_thread'
-    data.properties = { address: address, status }
-    this._track(data)
-  }
-
-  trackGetSpace (address, name, spaceExisted, status) {
-    let data = {}
-    data.event = 'api_get_space'
-    data.properties = { address: address, name: name, profile_existed: spaceExisted, status }
-    this._track(data)
-  }
-
-  trackGetProfile (address, profileExisted, status) {
-    let data = {}
-    data.event = 'api_get_profile'
-    data.properties = { address: address, profile_existed: profileExisted, status }
-    this._track(data)
-  }
-
-  trackGetProfiles (status) {
-    let data = {}
-    data.event = 'api_get_profiles'
-    data.properties = { status }
-    this._track(data)
+  dispatch (res) {
+    const path = res.req.route.path
+    const origin = domain(res.req.headers.host)
+    const track = {
+      status: res.statusCode,
+      event: reqEventMap['path'],
+      origin
+    }
+    this._track(Object.assign(track, res.analytics || {}), origin)
   }
 }
 
 module.exports = (writeKey, active = true) => {
   const client = writeKey && active ? new SegmentAnalytics(writeKey) : null
-  return {
-    api: new AnalyticsAPI(client)
-  }
+  return new AnalyticsAPI(client)
 }

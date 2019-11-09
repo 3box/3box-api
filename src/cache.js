@@ -6,12 +6,14 @@ const DAYS30 = 2592000
   *  RedisCache Representation. Wrapped redis client. Read, write, and invalidate objects.
   */
 class RedisCache {
-  constructor (redisOpts = {}, ttl) {
+  constructor (redisOpts = {}, orbitRedisCacheOpts = {}, ttl) {
     this.redis = redis.createClient(redisOpts)
     this.redis.on('error', function (err) {
       console.log('Error ' + err)
     })
     this.ttl = ttl || DAYS30
+    this.orbitRedis = redis.createClient(orbitRedisCacheOpts)
+    this.startInvalidationService()
   }
 
   read (key) {
@@ -30,13 +32,25 @@ class RedisCache {
   async invalidate (key) {
     this.redis.del(key)
   }
+
+  startInvalidationService() {
+    this.orbitRedis.on('pmessage', this.messageHandler.bind(this))
+    this.orbitRedis.psubscribe("__keyevent@*:set")
+  }
+
+  messageHandler (pattern, event, message) {
+    if (message.includes('localHeads') || message.includes('remoteHeads')) {
+      const address = message.split('__')[0]
+      this.invalidate(address)
+    }
+  }
 }
 
 /**
   *  NullCache implements an abstract cache interface without caching any
   *  data. Primarly used for testing and development.
   */
-
+// TODO maybe remove null cache now
 class NullCache {
   read (key) {
     return Promise.resolve(null)
