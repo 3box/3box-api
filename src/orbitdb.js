@@ -54,8 +54,15 @@ class OrbitDBRead {
 
    const accessController = await AccessControllers.resolve({'_ipfs': this._ipfs}, acAddress, acOpts)
 
-   // TODO build log from multiple heads and joins or TODO from none
-   const log = await Log.fromEntryHash(this._ipfs, nullIdentity, heads[0].hash, { logId: address, access: accessController, sortFn: undefined, length: amount})
+   let log
+   for (const head of heads) {
+     const mergelog = await Log.fromEntryHash(this._ipfs, nullIdentity, head.hash, { logId: address, access: accessController, sortFn: undefined, length: amount})
+     if (log) {
+       await log.join(mergelog)
+     } else {
+       log = mergelog
+     }
+   }
 
    // Get overlay db type to build db index
    if (!dbTypeIndex[dbType]) throw new Error('Type not supported')
