@@ -7,6 +7,24 @@ Object {
 }
 `;
 
+exports[`APIService GET /config respond 404 to address with no 3box 2`] = `
+Object {
+  "address": "0xD72e013d96f97412d524CaCB9AEfA885598E28d6",
+  "event": "api_get_config",
+  "origin": "",
+  "status": 404,
+}
+`;
+
+exports[`APIService GET /config respond 404 to did with no 3box 1`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_config",
+  "origin": "",
+  "status": 500,
+}
+`;
+
 exports[`APIService GET /config respond json to DID with 3box 1`] = `
 Object {
   "links": Array [
@@ -27,6 +45,15 @@ Timestamp: 1571945163",
       "DID": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
     },
   },
+}
+`;
+
+exports[`APIService GET /config respond json to DID with 3box 2`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_config",
+  "origin": "",
+  "status": 200,
 }
 `;
 
@@ -53,10 +80,37 @@ Timestamp: 1571945163",
 }
 `;
 
+exports[`APIService GET /config respond json to address with 3box 2`] = `
+Object {
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_get_config",
+  "origin": "",
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /list-spaces respond 404 to address with no 3box 1`] = `
 Object {
   "message": "Address link not found, address does not have a 3Box or is malformed",
   "status": "error",
+}
+`;
+
+exports[`APIService GET /list-spaces respond 404 to address with no 3box 2`] = `
+Object {
+  "address": "0xD72e013d96f97412d524CaCB9AEfA885598E28d6",
+  "event": "api_list_spaces",
+  "origin": "",
+  "status": 404,
+}
+`;
+
+exports[`APIService GET /list-spaces respond 404 to did with no profile 1`] = `
+Object {
+  "address": undefined,
+  "event": "api_list_spaces",
+  "origin": "",
+  "status": 500,
 }
 `;
 
@@ -66,6 +120,15 @@ Array [
 ]
 `;
 
+exports[`APIService GET /list-spaces respond json to DID with profile 2`] = `
+Object {
+  "address": undefined,
+  "event": "api_list_spaces",
+  "origin": "",
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /list-spaces respond json to address with profile 1`] = `
 Array [
   "api",
@@ -73,15 +136,28 @@ Array [
 `;
 
 exports[`APIService GET /list-spaces respond json to address with profile 2`] = `
-Array [
-  "api",
-]
+Object {
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_list_spaces",
+  "origin": "",
+  "status": 200,
+}
 `;
 
 exports[`APIService GET /profile respond 400 to missing required args 1`] = `
 Object {
   "message": "Either pass an \`address\` or \`did\` parameter",
   "status": "error",
+}
+`;
+
+exports[`APIService GET /profile respond 400 to missing required args 2`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 400,
 }
 `;
 
@@ -92,10 +168,50 @@ Object {
 }
 `;
 
+exports[`APIService GET /profile respond 404 to address with no profile 2`] = `
+Object {
+  "address": "0xD72e013d96f97412d524CaCB9AEfA885598E28d6",
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 404,
+}
+`;
+
 exports[`APIService GET /profile respond 404 to did passed as address 1`] = `
 Object {
   "message": "Address link not found, address does not have a 3Box or is malformed",
   "status": "error",
+}
+`;
+
+exports[`APIService GET /profile respond 404 to did passed as address 2`] = `
+Object {
+  "address": "did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL",
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 404,
+}
+`;
+
+exports[`APIService GET /profile respond 404 to did with no profile 1`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 500,
+}
+`;
+
+exports[`APIService GET /profile respond 500 to address passed as did 1`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 500,
 }
 `;
 
@@ -109,6 +225,16 @@ Object {
 }
 `;
 
+exports[`APIService GET /profile respond json to DID with profile 2`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /profile respond json to DID with profile and metadata option 1`] = `
 Object {
   "a": "a",
@@ -116,6 +242,16 @@ Object {
   "c": "c",
   "d": "d",
   "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+}
+`;
+
+exports[`APIService GET /profile respond json to DID with profile and metadata option 2`] = `
+Object {
+  "address": undefined,
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": true,
+  "status": 200,
 }
 `;
 
@@ -129,6 +265,16 @@ Object {
 }
 `;
 
+exports[`APIService GET /profile respond json to address with profile 2`] = `
+Object {
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /profile respond json to address with profile and metadata option 1`] = `
 Object {
   "a": "a",
@@ -139,20 +285,48 @@ Object {
 }
 `;
 
+exports[`APIService GET /profile respond json to address with profile and metadata option 2`] = `
+Object {
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_get_profile",
+  "origin": "",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /space respond 401 to missing args 1`] = `Object {}`;
+
+exports[`APIService GET /space respond 401 to missing args 2`] = `
+Object {
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_get_space",
+  "name": undefined,
+  "origin": "",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
 
 exports[`APIService GET /space respond 404 to space that does not exists 1`] = `
 Object {
-  "a": "a",
-  "b": "b",
-  "c": "c",
-  "d": "d",
-  "thread-/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread": Object {
-    "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
-    "firstModerator": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "members": false,
-    "name": "3box.thread.api.thread",
-  },
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_get_space",
+  "name": "notaspace",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 404,
+}
+`;
+
+exports[`APIService GET /space respond json to space (by DID) that exists 1`] = `
+Object {
+  "address": "did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL",
+  "event": "api_get_space",
+  "name": "api",
+  "origin": "",
+  "profile_existed": undefined,
+  "status": 404,
 }
 `;
 
@@ -171,11 +345,49 @@ Object {
 }
 `;
 
+exports[`APIService GET /space respond json to space (by address) that exists 2`] = `
+Object {
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "event": "api_get_space",
+  "name": "api",
+  "origin": "",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /thread respond 404 to thread by address that does NOT exist 1`] = `Array []`;
+
+exports[`APIService GET /thread respond 404 to thread by address that does NOT exist 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.notexist",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
+`;
 
 exports[`APIService GET /thread respond 404 to thread by config that does NOT exist 1`] = `Array []`;
 
+exports[`APIService GET /thread respond 404 to thread by config that does NOT exist 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAybfe7w58wQrXs9aZYZRbcNLCBW25gydYPf1E8N9CvZ4J/3box.thread.api.noexist",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /thread respond 500 to thread address malformed 1`] = `Array []`;
+
+exports[`APIService GET /thread respond 500 to thread address malformed 2`] = `
+Object {
+  "address": "zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
+`;
 
 exports[`APIService GET /thread respond 500 to thread by config missing args 1`] = `
 Array [
@@ -198,6 +410,15 @@ Array [
     "timestamp": 1572461638,
   },
 ]
+`;
+
+exports[`APIService GET /thread respond 500 to thread by config missing args 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
 `;
 
 exports[`APIService GET /thread respond json to thread by address that exists 1`] = `
@@ -223,6 +444,15 @@ Array [
 ]
 `;
 
+exports[`APIService GET /thread respond json to thread by address that exists 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /thread respond json to thread by config that exists 1`] = `
 Array [
   Object {
@@ -244,4 +474,13 @@ Array [
     "timestamp": 1572461638,
   },
 ]
+`;
+
+exports[`APIService GET /thread respond json to thread by config that exists 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
 `;

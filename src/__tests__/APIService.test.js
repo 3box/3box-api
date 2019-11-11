@@ -35,11 +35,17 @@ jest.mock('redis', () => {
 
 describe('APIService', async () => {
   let app
+  let api
 
   beforeAll(async () => {
     // TODO move this arg to env
-    const api = await API('./src/__tests__/test-data/ipfs')
+    api = await API('./src/__tests__/test-data/ipfs')
+    api.analytics._track = jest.fn()
     app = api.app
+  })
+
+  beforeEach(() => {
+    api.analytics._track.mockClear()
   })
 
   describe('GET /profile', () => {
@@ -52,6 +58,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -64,6 +71,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -77,6 +85,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -90,6 +99,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -102,22 +112,24 @@ describe('APIService', async () => {
         .expect(404)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
 
-    //TODO too slow without local resolution
-    // it('respond 404 to did with no profile', async function(done) {
-    //   request(app)
-    //     .get('/profile?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
-    //     .set('Accept', 'application/json')
-    //     .expect('Content-Type', /json/)
-    //     .expect(200)
-    //     .then(response => {
-    //       expect(response.body).toMatchSnapshot()
-    //       done()
-    //     })
-    // })
+    //TODO return 404 instead of invalid did...
+    it('respond 404 to did with no profile', async function(done) {
+      request(app)
+        .get('/profile?did=did%3Amuport%3AQmQAnachTJXMHVKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .set('Accept', 'application/json')
+        // .expect('Content-Type', /json/)
+        .expect(500)
+        .then(response => {
+          // expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
 
     //NOTE: Could have more specific error, invalid address instead of 404
     it('respond 404 to did passed as address', async function(done) {
@@ -128,6 +140,7 @@ describe('APIService', async () => {
         .expect(404)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -141,6 +154,7 @@ describe('APIService', async () => {
         .expect(500)
         .then(response => {
           // expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -153,6 +167,7 @@ describe('APIService', async () => {
         .expect(400)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -168,6 +183,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -180,6 +196,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -193,6 +210,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -206,6 +224,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -220,6 +239,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -233,6 +253,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -248,6 +269,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -259,6 +281,7 @@ describe('APIService', async () => {
         .expect('Content-Type', /json/)
         .expect(404)
         .then(response => {
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -270,6 +293,7 @@ describe('APIService', async () => {
         .expect('Content-Type', /json/)
         .expect(404)
         .then(response => {
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -283,6 +307,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -298,6 +323,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -310,6 +336,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -322,22 +349,24 @@ describe('APIService', async () => {
         .expect(404)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
 
-    //TODO too slow without local resolution
-    // it('respond 404 to did with no profile', async function(done) {
-    //   request(app)
-    //     .get('/list-spaces?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
-    //     .set('Accept', 'application/json')
-    //     .expect('Content-Type', /json/)
-    //     .expect(200)
-    //     .then(response => {
-    //       expect(response.body).toMatchSnapshot()
-    //       done()
-    //     })
-    // })
+    //TODO return 404 instead of 500
+    it('respond 404 to did with no profile', async function(done) {
+      request(app)
+        .get('/list-spaces?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
+        .set('Accept', 'application/json')
+        // .expect('Content-Type', /json/)
+        .expect(500)
+        .then(response => {
+          // expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
   })
 
   describe('GET /config', () => {
@@ -349,6 +378,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -361,6 +391,7 @@ describe('APIService', async () => {
         .expect(200)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
@@ -373,22 +404,24 @@ describe('APIService', async () => {
         .expect(404)
         .then(response => {
           expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
 
-    //TODO too slow without local resolution
-    // it('respond 404 to did with no 3box', async function(done) {
-    //   request(app)
-    //     .get('/config?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
-    //     .set('Accept', 'application/json')
-    //     .expect('Content-Type', /json/)
-    //     .expect(200)
-    //     .then(response => {
-    //       expect(response.body).toMatchSnapshot()
-    //       done()
-    //     })
-    // })
+    // TODO return 404 instead of 500
+    it('respond 404 to did with no 3box', async function(done) {
+      request(app)
+        .get('/config?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
+        .set('Accept', 'application/json')
+        // .expect('Content-Type', /json/)
+        .expect(500)
+        .then(response => {
+          // expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
   })
 
   describe('POST /profileList', () => {

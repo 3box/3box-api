@@ -119,19 +119,22 @@ class APIService {
          if (!entry.odbAddress) return false
          return entry.odbAddress.split('.')[2] === spaceName
        })
-       if (!spaceEntry) return errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
-       const spaceAddress = spaceEntry.odbAddress
-       space = await this.orbitdb.readDB(spaceAddress)
+       if (!spaceEntry) {
+         errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
+       } else {
+         const spaceAddress = spaceEntry.odbAddress
+         space = await this.orbitdb.readDB(spaceAddress)
 
-       const parsedSpace = Object.keys(space).reduce((obj, key) => {
-         if (key.startsWith('pub_')) {
-           const x = space[key]
-           const timestamp = Math.floor(x.timeStamp / 1000)
-           obj[key.slice(4)] = { value: x.value, timestamp }
-         }
-         return obj
-       }, {})
-       res.json(this._mungeSpace(parsedSpace, metadata))
+         const parsedSpace = Object.keys(space).reduce((obj, key) => {
+           if (key.startsWith('pub_')) {
+             const x = space[key]
+             const timestamp = Math.floor(x.timeStamp / 1000)
+             obj[key.slice(4)] = { value: x.value, timestamp }
+           }
+           return obj
+         }, {})
+         res.json(this._mungeSpace(parsedSpace, metadata))
+       }
      } catch (e) {
        errorToResponse(res, e, 'Error: Failed to load space')
      }
@@ -147,17 +150,25 @@ class APIService {
     let { address, space, name, mod, members } = req.query
     members = members === 'true'
     const usingConfig = !!(space && name && mod)
-    if (usingConfig) {
-      const fullName = namesTothreadName(space, name)
-      address = await this.orbitdb.getThreadAddress(fullName, mod, members)
+
+    try {
+      if (usingConfig) {
+        const fullName = namesTothreadName(space, name)
+        address = await this.orbitdb.getThreadAddress(fullName, mod, members)
+      }
+
+      const entries = await this.orbitdb.readDB(address, true)
+
+      //NOTE could return error if not manifest file from readDB instead of empty, to indicate wrong args
+      if (!entries) {
+        res.json([])
+      } else {
+        const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
+        res.json(thread)
+      }
+    } catch (e) {
+      errorToResponse(res, e, 'Error: Failed to load thread')
     }
-
-    const entries = await this.orbitdb.readDB(address, true)
-
-    //NOTE could return error if not manifest file from readDB instead of empty, to indicate wrong args
-    if (!entries) return res.json([])
-    const thread = entries.map(entry => Object.assign({ postId: entry.hash, author: entry.identity.id }, entry.payload.value))
-    res.json(thread)
 
     res.analytics = { address }
     next()

@@ -34,7 +34,7 @@ class AnalyticsAPI {
     const origin = domain(res.req.headers.host)
     const track = {
       status: res.statusCode,
-      event: reqEventMap['path'],
+      event: reqEventMap[path],
       origin
     }
     this._track(Object.assign(track, res.analytics || {}), origin)
