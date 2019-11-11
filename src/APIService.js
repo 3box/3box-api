@@ -32,7 +32,7 @@ class APIService {
     })
 
     this.app.get('/profile', this.getProfile.bind(this))
-    // this.app.post('/profileList', this.getProfiles.bind(this))
+    this.app.post('/profileList', this.getProfiles.bind(this))
     this.app.get('/space', this.getSpace.bind(this))
     this.app.get('/list-spaces', this.listSpaces.bind(this))
     this.app.get('/config', this.getConfig.bind(this))
@@ -65,14 +65,18 @@ class APIService {
     return db
   }
 
+  async _rootToPublicDB (rootStoreAddress) {
+    const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+    const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
+    return publicDBEntry.odbAddress
+  }
+
   async getProfile (req, res, next) {
     const { address, did, metadata } = req.query
     let profile
     try {
       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-      const rootDB = await this.orbitdb.readDB(rootStoreAddress)
-      const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
-      const publicDBAddress = publicDBEntry.odbAddress
+      const publicDBAddress = await this._rootToPublicDB(rootStoreAddress)
       profile = await this.orbitdb.readDB(publicDBAddress)
       res.json(this._mungeProfile(profile))
     } catch (e) {
@@ -206,10 +210,46 @@ class APIService {
     next()
   }
 
+  async getProfiles (req, res, next) {
+    const { body } = req
+    const { metadata, addressList, didList } = body
+    const origin = req.headers.origin
+
+    if (!addressList && !didList) {
+      this.analytics.trackGetProfiles(400, origin)
+      res.status(400).send('Error: AddressList not given')
+      next()
+      return
+    }
+
+    // map addresses -> root stores
+    const addrFromEth = await this.ethereumToRootStoreAddresses(addressList || [])
+    const addrFromDID = await this.didToRootStoreAddresses(didList || [])
+    const rootStoreAddresses = { ...addrFromEth, ...addrFromDID }
+
+    // Load the data
+    const profilePromiseArray = Object.keys(rootStoreAddresses)
+      .filter((key) => !!rootStoreAddresses[key])
+      .map(async (key) => {
+        const rootStoreAddress = rootStoreAddresses[key]
+        const publicDBAddress = await this._rootToPublicDB(rootStoreAddress)
+        const profile = await this.readDB(publicDBAddress)
+        return { address: key, profile: this._mungeProfile(profile, metadata) }
+      })
+
+    const profiles = await Promise.all(profilePromiseArray)
+    const parsed = profiles.reduce((acc, val) => {
+      acc[val.address] = val.profile
+      return acc
+    }, {})
+
+    res.json(parsed)
+    next()
+  }
+
   async ethereumToRootStoreAddress (address) {
     const normalized = address.toLowerCase()
     const url = `${this.addressServer}/odbAddress/${normalized}`
-    // console.log(url)
     try {
       const r = await axios.get(url)
       return r.data.data.rootStoreAddress

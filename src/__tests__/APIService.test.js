@@ -17,7 +17,14 @@ jest.mock('axios', () => {
       }
       return {"status":"error","message":"address not linked"}
     }),
-    post: jest.fn()
+    post: () => {
+      // TODO return multiple addresses
+      return { data: {"status":"success",
+                "data":{"rootStoreAddresses":
+                  { '0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c': "/orbitdb/QmUGS97iEKTdYKk9eRAeEDcYddjf4cPvEBN3VYWAt4UQzq/122005848b73823cd14509c582c552ca7a4e4e668a7228dd8118cfddf2f7cf8cc21c.root"}
+                }}}
+        }
+
   }
 })
 
@@ -426,9 +433,49 @@ describe('APIService', async () => {
 
   describe('POST /profileList', () => {
 
-
-    it('should ', async () => {
-
+    it('respond JSON to addressList with profile [size 1]', async (done) => {
+      request(app)
+        .post('/profileList')
+        .send({addressList: ['0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c']})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
     })
+
+    it('respond JSON to didList with profile [size 1] ', async (done) => {
+      request(app)
+        .post('/profileList')
+        .send({didList: ['did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL']})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond empty JSON to addressList with NO profile [size 1] ', async (done) => {
+      request(app)
+        .post('/profileList')
+        .send({addressList: ['0xD72e013d96f97412d524CaCB9AEfA885598E28d6']})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
+    // test for 1+ req, error states and mix did and address list
+
   })
 })

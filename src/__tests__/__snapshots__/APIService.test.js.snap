@@ -484,3 +484,63 @@ Object {
   "status": 200,
 }
 `;
+
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 1`] = `
+Object {
+  "0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c": Object {
+    "a": "a",
+    "b": "b",
+    "c": "c",
+    "d": "d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "",
+  "status": 200,
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to didList with profile [size 1]  1`] = `
+Object {
+  "did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL": Object {
+    "a": "a",
+    "b": "b",
+    "c": "c",
+    "d": "d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to didList with profile [size 1]  2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "",
+  "status": 200,
+}
+`;
+
+exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  1`] = `
+Object {
+  "0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c": Object {
+    "a": "a",
+    "b": "b",
+    "c": "c",
+    "d": "d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "",
+  "status": 200,
+}
+`;
