@@ -277,11 +277,26 @@ Object {
 
 exports[`APIService GET /profile respond json to address with profile and metadata option 1`] = `
 Object {
-  "a": "a",
-  "b": "b",
-  "c": "c",
-  "d": "d",
-  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  "a": Object {
+    "timeStamp": 1572016307892,
+    "value": "a",
+  },
+  "b": Object {
+    "timeStamp": 1572016310508,
+    "value": "b",
+  },
+  "c": Object {
+    "timeStamp": 1572280683432,
+    "value": "c",
+  },
+  "d": Object {
+    "timeStamp": 1572302718011,
+    "value": "d",
+  },
+  "proof_did": Object {
+    "timeStamp": 1571945167809,
+    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  },
 }
 `;
 

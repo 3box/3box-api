@@ -56,17 +56,17 @@ class APIService {
     server.keepAliveTimeout = 60 * 1000
   }
 
-  async readDB (address) {
-    if (!this.cache) return this.orbitdb.readDB(address)
+  async _readDB (address, threadMetaData) {
+    if (!this.cache) return this.orbitdb.readDB(address, threadMetaData)
     const cacheHit = await this.cache.read(address)
     if (cacheHit) return cacheHit
-    const db = this.orbitdb.readDB(address)
+    const db = await this.orbitdb.readDB(address, threadMetaData)
     this.cache.write(address, db)
     return db
   }
 
   async _rootToPublicDB (rootStoreAddress) {
-    const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+    const rootDB = await this._readDB(rootStoreAddress)
     const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
     return publicDBEntry.odbAddress
   }
@@ -77,8 +77,8 @@ class APIService {
     try {
       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
       const publicDBAddress = await this._rootToPublicDB(rootStoreAddress)
-      profile = await this.orbitdb.readDB(publicDBAddress)
-      res.json(this._mungeProfile(profile))
+      profile = await this._readDB(publicDBAddress)
+      res.json(this._mungeProfile(profile, metadata))
     } catch (e) {
       errorToResponse(res, e, 'Error: Failed to load profile')
     }
@@ -92,7 +92,7 @@ class APIService {
     const { address, did } = req.query
     try {
       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-      const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+      const rootDB = await this._readDB(rootStoreAddress)
       const spaces = rootDB.reduce((list, entry) => {
         if (!entry.odbAddress) return list
         const name = entry.odbAddress.split('.')[2]
@@ -118,7 +118,7 @@ class APIService {
     let space
     try {
        const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-       const rootDB = await this.orbitdb.readDB(rootStoreAddress)
+       const rootDB = await this._readDB(rootStoreAddress)
        const spaceEntry = rootDB.find(entry => {
          if (!entry.odbAddress) return false
          return entry.odbAddress.split('.')[2] === spaceName
@@ -127,7 +127,7 @@ class APIService {
          errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
        } else {
          const spaceAddress = spaceEntry.odbAddress
-         space = await this.orbitdb.readDB(spaceAddress)
+         space = await this._readDB(spaceAddress)
 
          const parsedSpace = Object.keys(space).reduce((obj, key) => {
            if (key.startsWith('pub_')) {
@@ -161,7 +161,7 @@ class APIService {
         address = await this.orbitdb.getThreadAddress(fullName, mod, members)
       }
 
-      const entries = await this.orbitdb.readDB(address, true)
+      const entries = await this._readDB(address, true)
 
       //NOTE could return error if not manifest file from readDB instead of empty, to indicate wrong args
       if (!entries) {
@@ -183,7 +183,7 @@ class APIService {
 
     try {
       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-      const entries = await this.orbitdb.readDB(rootStoreAddress, true)
+      const entries = await this._readDB(rootStoreAddress, true)
       let conf = {}
 
       for (let i = 0; i < entries.length; i++) {
@@ -233,7 +233,7 @@ class APIService {
       .map(async (key) => {
         const rootStoreAddress = rootStoreAddresses[key]
         const publicDBAddress = await this._rootToPublicDB(rootStoreAddress)
-        const profile = await this.readDB(publicDBAddress)
+        const profile = await this._readDB(publicDBAddress)
         return { address: key, profile: this._mungeProfile(profile, metadata) }
       })
 
