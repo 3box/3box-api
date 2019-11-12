@@ -8,7 +8,8 @@ const ipfsRepo = (config) => {
   }, {
     bucket,
     accessKeyId,
-    secretAccessKey
+    secretAccessKey,
+    createIfMissing: false
   })
 }
 
