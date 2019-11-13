@@ -5,7 +5,7 @@ version: 2.1
 
 jobs:
   test:
-    working_directory: ~/3box-pinning-server
+    working_directory: ~/3box-api
     docker:
       - image: circleci/node:10
     steps:
@@ -40,31 +40,25 @@ jobs:
             - ./node_modules
 
   deploy-dev:
-    working_directory: ~/3box-pinning-server
+    working_directory: ~/3box-api
     docker:
       - image: circleci/python:3.7.1
     steps:
       - aws-cli/install
       - aws-cli/configure
-      - run:
-          name: Deploy Pinning Service
-          command: aws ecs update-service --force-new-deployment --cluster  pinning-node-cluster-dev  --service pinning-node-service-dev
       - run:
           name: Deploy API Service
           command: aws ecs update-service --force-new-deployment --cluster  pinning-node-cluster-dev  --service profile-api-service-dev
 
   # Need seperate clusters if we have dev and prod, depends how we want to treat dev
   deploy-prod:
-    working_directory: ~/3box-pinning-server
+    working_directory: ~/3box-api
     docker:
       - image: circleci/python:3.7.1
 
     steps:
       - aws-cli/install
       - aws-cli/configure
-      - run:
-          name: Deploy Pinning Service
-          command: aws ecs update-service --force-new-deployment --cluster pinning-node-cluster-prod  --service pinning-node-service-prod
       - run:
           name: Deploy API Service
           command: aws ecs update-service --force-new-deployment --cluster pinning-node-cluster-prod  --service profile-api-service-prod
@@ -75,31 +69,31 @@ workflows:
       - test
       - aws-ecr/build_and_push_image:
           name: push-dev-image
-          repo: 3box-pinning-server
+          repo: 3box-api
           tag: develop
           requires:
             - test
           filters:
             branches:
               only: develop
-      - aws-ecr/build_and_push_image:
-          name: push-prod-image
-          repo: 3box-pinning-server
-          tag: latest
-          requires:
-            - test
-          filters:
-            branches:
-              only: master
+      # - aws-ecr/build_and_push_image:
+      #     name: push-prod-image
+      #     repo: 3box-api
+      #     tag: latest
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only: master
       - deploy-dev:
           requires:
             - push-dev-image
           filters:
             branches:
               only: develop
-      - deploy-prod:
-          requires:
-            - push-prod-image
-          filters:
-            branches:
-              only: master
+      # - deploy-prod:
+      #     requires:
+      #       - push-prod-image
+      #     filters:
+      #       branches:
+      #         only: master
