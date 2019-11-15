@@ -31,6 +31,7 @@ class APIService {
       next()
     })
 
+    this.app.get('/healthcheck', this.healthCheck.bind(this))
     this.app.get('/profile', this.getProfile.bind(this))
     this.app.post('/profileList', this.getProfiles.bind(this))
     this.app.get('/space', this.getSpace.bind(this))
@@ -58,10 +59,11 @@ class APIService {
 
   async _readDB (address, threadMetaData) {
     if (!this.cache) return this.orbitdb.readDB(address, threadMetaData)
-    const cacheHit = await this.cache.read(address)
+    const cacheHit = await this.cache.read(address.split('/orbitdb/')[1])
+    if (cacheHit) console.log(`cachehit - ${address}`)
     if (cacheHit) return cacheHit
     const db = await this.orbitdb.readDB(address, threadMetaData)
-    this.cache.write(address, db)
+    this.cache.write(address.split('/orbitdb/')[1], db)
     return db
   }
 
@@ -69,6 +71,10 @@ class APIService {
     const rootDB = await this._readDB(rootStoreAddress)
     const publicDBEntry = rootDB.find(e => e.odbAddress ? e.odbAddress.includes('public') : false)
     return publicDBEntry.odbAddress
+  }
+
+  async healthCheck (req, res, next) {
+    res.json({})
   }
 
   async getProfile (req, res, next) {
@@ -265,7 +271,6 @@ class APIService {
 
     const normalized = addresses.map(x => x.toLowerCase())
     const url = `${this.addressServer}/odbAddresses/`
-    // console.log(url)
 
     try {
       const r = await axios.post(url, { identities: normalized })

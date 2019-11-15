@@ -5,6 +5,8 @@ const DAYS30 = 2592000
 /**
   *  RedisCache Representation. Wrapped redis client. Read, write, and invalidate objects.
   */
+
+// TODO normalize write, del, read keys for address
 class RedisCache {
   constructor (redisOpts = {}, orbitRedisCacheOpts = {}, ttl) {
     this.redis = redis.createClient(redisOpts)
