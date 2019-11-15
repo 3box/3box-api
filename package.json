@@ -1,6 +1,6 @@
 {
-  "name": "3box-api-node",
-  "version": "0.0.0",
+  "name": "3box-api",
+  "version": "0.1.0",
   "description": "3box",
   "main": "src/node.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/3box/3box-api-node.git"
+    "url": "git+https://github.com/3box/3box-api.git"
   },
   "keywords": [
     "ipfs",
@@ -20,9 +20,9 @@
   "author": "3box",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/3box/3box-pinning-node/issues"
+    "url": "https://github.com/3box/3box-api/issues"
   },
-  "homepage": "https://github.com/3box/3box-pinning-node#readme",
+  "homepage": "https://github.com/3box/3box-api#readme",
   "dependencies": {
     "3box-orbitdb-plugins": "^1.0.5",
     "3id-resolver": "^0.0.4",
