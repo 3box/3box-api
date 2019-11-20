@@ -4,27 +4,60 @@ const API = require('../node.js')
 
 jest.setTimeout(30000);
 
-// TODO create data for three users
+const user1 = {
+  address: '0x08abf5d121998b8bb022156ef972e22f9fb84f3a',
+  did: 'did%3Amuport%3AQmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5',
+  spaceoneDid: 'did%3A3%3Abafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje'
+}
+
+const user2 = {
+  address: '0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34',
+  did: 'did%3Amuport%3AQmU3rKK7zAAswGWX7863m5iY78NEPZc5sfAENCkefQLvFX',
+  spaceoneDid: 'did%3A3%3Abafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam'
+}
+
+const user3 = {
+  address: '0x0acc7a1ffe266b2192c8f717141a0cc03672bfba',
+  did: 'did%3Amuport%3AQmUAxywv5B3W9U2GSHHncTak2M4uCiEbc9mN2uE8HhhJGM'
+}
+
+const notUser = {
+  address: '0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c',
+  did: 'did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL'
+}
+
+// posts by 3 users, first two entry deleted
+const openThreadAddress = '/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open'
+// closed to user 1 and user 2, first entry deleted
+const closedThreadAddress = '/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2'
+
 // MOCK HTTP TO ADDRESS SERVER
 jest.mock('axios', () => {
   return {
     get: jest.fn((url) => {
-      if (url.includes('0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c')) {
-      // https://beta.3box.io/address-server/odbAddress/0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c
-        return { data: {"status":"success",
-                  "data":{"rootStoreAddress":"/orbitdb/QmUGS97iEKTdYKk9eRAeEDcYddjf4cPvEBN3VYWAt4UQzq/122005848b73823cd14509c582c552ca7a4e4e668a7228dd8118cfddf2f7cf8cc21c.root",
-                                       "did":"did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL"}}}
+      if (url.includes('0x08abf5d121998b8bb022156ef972e22f9fb84f3a')) {
+        // https://beta.3box.io/address-server/odbAddress/0x08abf5d121998b8bb022156ef972e22f9fb84f3a
+        return { data: {"status":"success","data":{"rootStoreAddress":"/orbitdb/QmdocSxFGo84tod5DRW5LUeSYcQpG3WVYjB5znx1A5QFMs/12203666f93fdc578232887a4cc1b5a60171f979ca9b5e7845f4f49834d217f11b98.root","did":"did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5"}}}
+      }
+      if (url.includes('0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34')) {
+        // https://beta.3box.io/address-server/odbAddress/0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34
+        return { data: {"status":"success","data":{"rootStoreAddress":"/orbitdb/QmY4CemYGA8vM7o5GxzfpfDkreudDjQJX1fGxkfgDm9pM4/1220abf954f044f07562415931a6986d4fb2dbd0f3c4c2a13ec95d463518a967ac2a.root","did":"did:muport:QmU3rKK7zAAswGWX7863m5iY78NEPZc5sfAENCkefQLvFX"}}}
+      }
+      if (url.includes('0x0acc7a1ffe266b2192c8f717141a0cc03672bfba')) {
+      // https://beta.3box.io/address-server/odbAddress/0x0acc7a1ffe266b2192c8f717141a0cc03672bfba
+        return { data: {"status":"success","data":{"rootStoreAddress":"/orbitdb/QmeQxxTTVXFTtM9FvtRE4n3shyzevLYzudV6ZMFnzwX7yy/1220a0aad86899dcf21abd133ea7515601c82ebffc1a3eb206504619d0c14a1b2520.root","did":"did:muport:QmUAxywv5B3W9U2GSHHncTak2M4uCiEbc9mN2uE8HhhJGM"}}}
       }
       return {"status":"error","message":"address not linked"}
     }),
     post: () => {
-      // TODO return multiple addresses
+      // Returns all three
       return { data: {"status":"success",
                 "data":{"rootStoreAddresses":
-                  { '0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c': "/orbitdb/QmUGS97iEKTdYKk9eRAeEDcYddjf4cPvEBN3VYWAt4UQzq/122005848b73823cd14509c582c552ca7a4e4e668a7228dd8118cfddf2f7cf8cc21c.root"}
+                  { '0x08abf5d121998b8bb022156ef972e22f9fb84f3a': "/orbitdb/QmdocSxFGo84tod5DRW5LUeSYcQpG3WVYjB5znx1A5QFMs/12203666f93fdc578232887a4cc1b5a60171f979ca9b5e7845f4f49834d217f11b98.root",
+                    '0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34': "/orbitdb/QmY4CemYGA8vM7o5GxzfpfDkreudDjQJX1fGxkfgDm9pM4/1220abf954f044f07562415931a6986d4fb2dbd0f3c4c2a13ec95d463518a967ac2a.root",
+                    '0x0acc7a1ffe266b2192c8f717141a0cc03672bfba': "/orbitdb/QmeQxxTTVXFTtM9FvtRE4n3shyzevLYzudV6ZMFnzwX7yy/1220a0aad86899dcf21abd133ea7515601c82ebffc1a3eb206504619d0c14a1b2520.root" }
                 }}}
         }
-
   }
 })
 
@@ -59,7 +92,20 @@ describe('APIService', async () => {
 
     it('respond json to address with profile', async function(done) {
       request(app)
-        .get('/profile?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c')
+        .get(`/profile?address=${user1.address}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond json to address with profile (add and change keys)', async function(done) {
+      request(app)
+        .get(`/profile?address=${user2.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -72,7 +118,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with profile', async function(done) {
       request(app)
-        .get('/profile?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .get(`/profile?did=${user1.did}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -84,9 +130,8 @@ describe('APIService', async () => {
     })
 
     it('respond json to address with profile and metadata option', async function(done) {
-      // TODO snapshot incorrect, need to pass back through metadata
       request(app)
-        .get('/profile?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c&metadata=true')
+        .get(`/profile?address=${user1.address}&metadata=true`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -98,9 +143,8 @@ describe('APIService', async () => {
     })
 
     it('respond json to DID with profile and metadata option', async function(done) {
-        // TODO snapshot incorrect, need to pass back through metadata
       request(app)
-        .get('/profile?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .get(`/profile?did=${user1.did}&metadata=true`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -113,7 +157,7 @@ describe('APIService', async () => {
 
     it('respond 404 to address with no profile', async function(done) {
       request(app)
-        .get('/profile?address=0xD72e013d96f97412d524CaCB9AEfA885598E28d6')
+        .get(`/profile?address=${notUser.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -127,7 +171,7 @@ describe('APIService', async () => {
     //TODO return 404 instead of invalid did...
     it('respond 404 to did with no profile', async function(done) {
       request(app)
-        .get('/profile?did=did%3Amuport%3AQmQAnachTJXMHVKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .get(`/profile?did=${notUser.did}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -141,7 +185,7 @@ describe('APIService', async () => {
     //NOTE: Could have more specific error, invalid address instead of 404
     it('respond 404 to did passed as address', async function(done) {
       request(app)
-        .get('/profile?address=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .get(`/profile?address=${user1.did}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -155,7 +199,7 @@ describe('APIService', async () => {
     //NOTE: could return specific error + json, instead of generic 500
     it('respond 500 to address passed as did', async function(done) {
       request(app)
-        .get('/profile?did=0xD72e013d96f97412d524CaCB9AEfA885598E28d6')
+        .get(`/profile?did=${user1.address}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -182,9 +226,9 @@ describe('APIService', async () => {
 
   describe('GET /thread', () => {
 
-    it('respond json to thread by address that exists', async (done) => {
+    it('respond json to thread by address that exists [open thread]', async (done) => {
       request(app)
-        .get('/thread?address=/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread')
+        .get(`/thread?address=${openThreadAddress}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -195,9 +239,24 @@ describe('APIService', async () => {
         })
     })
 
-    it('respond json to thread by config that exists', async (done) => {
+    // TODO
+    // it('respond json to thread by address that exists [member thread]', async (done) => {
+    //   request(app)
+    //     .get(`/thread?address=${closedThreadAddress}`)
+    //     .set('Accept', 'application/json')
+    //     // .expect('Content-Type', /json/)
+    //     // .expect(200)
+    //     .then(response => {
+    //       console.log(response)
+    //       // expect(response.body).toMatchSnapshot()
+    //       // expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+    //       done()
+    //     })
+    // })
+
+    it('respond json to thread by config that exists [open thread]', async (done) => {
       request(app)
-        .get('/thread?space=api&name=thread&mod=did%3A3%3Abafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy&members=false')
+        .get(`/thread?space=spaceone&name=open&mod=${user1.spaceoneDid}&members=false`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -207,11 +266,25 @@ describe('APIService', async () => {
           done()
         })
     })
+
+    // TODO
+    // it('respond json to thread by config that exists [member thread]', async (done) => {
+    //   request(app)
+    //     .get(`/thread?space=spaceone&name=closedu1u2&mod=${user1.spaceoneDid}&members=true`)
+    //     .set('Accept', 'application/json')
+    //     .expect('Content-Type', /json/)
+    //     .expect(200)
+    //     .then(response => {
+    //       expect(response.body).toMatchSnapshot()
+    //       expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+    //       done()
+    //     })
+    // })
 
     //NOTE could return error (404) if not manifest file from readDB instead of empty, to indicate wrong args
     it('respond 404 to thread by config that does NOT exist', async (done) => {
       request(app)
-        .get('/thread?space=api&name=noexist&mod=did%3A3%3Abafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy&members=false')
+        .get(`/thread?space=spaceone&name=noexist&mod=${user1.spaceoneDid}&members=false`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -240,7 +313,7 @@ describe('APIService', async () => {
     it('respond 500 to thread by config missing args', async (done) => {
       // missing members
       request(app)
-        .get('/thread?space=api&name=thread&mod=did%3A3%3Abafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy')
+        .get(`/thread?space=api&name=thread&mod=${user1.spaceoneDid}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -254,7 +327,7 @@ describe('APIService', async () => {
     // NOTE return specific error, instead empty 200
     it('respond 500 to thread address malformed', async (done) => {
       request(app)
-        .get('/thread?address=zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread')
+        .get(`/thread?address=zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -270,7 +343,7 @@ describe('APIService', async () => {
 
     it('respond json to space (by address) that exists', async (done) => {
       request(app)
-        .get('/space?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c&name=api')
+        .get(`/space?address=${user1.address}&name=spaceone`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -281,9 +354,47 @@ describe('APIService', async () => {
         })
     })
 
-    it('respond 404 to space that does not exists', async (done) => {
+    it('respond json to space (by address) that exists (add and change keys)', async (done) => {
       request(app)
-        .get('/space?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c&name=notaspace')
+        .get(`/space?address=${user2.address}&name=spaceone`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond json to space (by address) that exists (but empty)', async (done) => {
+      request(app)
+        .get(`/space?address=${user3.address}&name=spacetwo`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond 404 to space that does not exists in existing user', async (done) => {
+      request(app)
+        .get(`/space?address=${user1.address}&name=notaspace`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .then(response => {
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond 404 to space that does not exists and for user that does not exist', async (done) => {
+      request(app)
+        .get(`/space?address=${notUser.address}&name=notaspace`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -295,7 +406,7 @@ describe('APIService', async () => {
 
     it('respond json to space (by DID) that exists', async (done) => {
       request(app)
-        .get('/space?address=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL&name=api')
+        .get(`/space?address=${user1.did}&name=spaceone`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -308,7 +419,7 @@ describe('APIService', async () => {
     // NOTE, instead of returning empty space, return specific error
     it('respond 401 to missing args', async (done) => {
       request(app)
-        .get('/space?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c')
+        .get(`/space?address=${user1.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -324,7 +435,7 @@ describe('APIService', async () => {
 
     it('respond json to address with profile', async function(done) {
       request(app)
-        .get('/list-spaces?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c')
+        .get(`/list-spaces?address=${user1.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -337,7 +448,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with profile', async function(done) {
       request(app)
-        .get('/list-spaces?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .get(`/list-spaces?did=${user1.did}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -350,7 +461,7 @@ describe('APIService', async () => {
 
     it('respond 404 to address with no 3box', async function(done) {
       request(app)
-        .get('/list-spaces?address=0xD72e013d96f97412d524CaCB9AEfA885598E28d6')
+        .get(`/list-spaces?address=${notUser.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -364,7 +475,7 @@ describe('APIService', async () => {
     //TODO return 404 instead of 500
     it('respond 404 to did with no profile', async function(done) {
       request(app)
-        .get('/list-spaces?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
+        .get(`/list-spaces?did=${notUser.did}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -379,7 +490,7 @@ describe('APIService', async () => {
   describe('GET /config', () => {
     it('respond json to address with 3box', async function(done) {
       request(app)
-        .get('/config?address=0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c')
+        .get(`/config?address=${user1.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -392,7 +503,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with 3box', async function(done) {
       request(app)
-        .get('/config?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL')
+        .get(`/config?did=${user1.did}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -405,7 +516,7 @@ describe('APIService', async () => {
 
     it('respond 404 to address with no 3box', async function(done) {
       request(app)
-        .get('/config?address=0xD72e013d96f97412d524CaCB9AEfA885598E28d6')
+        .get(`/config?address=${notUser.address}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -419,7 +530,7 @@ describe('APIService', async () => {
     // TODO return 404 instead of 500
     it('respond 404 to did with no 3box', async function(done) {
       request(app)
-        .get('/config?did=did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJZZZZZZZZZZZZZZZZZ')
+        .get(`/config?did=${notUser.did}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -432,11 +543,12 @@ describe('APIService', async () => {
   })
 
   describe('POST /profileList', () => {
+    // TODO don't base response on address server response, or align those responses for testing
 
     it('respond JSON to addressList with profile [size 1]', async (done) => {
       request(app)
         .post('/profileList')
-        .send({addressList: ['0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c']})
+        .send({addressList: [user1.address]})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -450,7 +562,7 @@ describe('APIService', async () => {
     it('respond JSON to didList with profile [size 1] ', async (done) => {
       request(app)
         .post('/profileList')
-        .send({didList: ['did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL']})
+        .send({didList: ['did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5']})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -464,7 +576,7 @@ describe('APIService', async () => {
     it('respond empty JSON to addressList with NO profile [size 1] ', async (done) => {
       request(app)
         .post('/profileList')
-        .send({addressList: ['0xD72e013d96f97412d524CaCB9AEfA885598E28d6']})
+        .send({addressList: [notUser.address]})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -475,7 +587,32 @@ describe('APIService', async () => {
         })
     })
 
-    // test for 1+ req, error states and mix did and address list
+    it('respond JSON to addressList with profile [size 3]', async (done) => {
+      request(app)
+        .post('/profileList')
+        .send({addressList: [user1.address, user2.address, user3.address]})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
 
+    it('respond JSON to addressList with mix profile and not profiles [size 3, response 2]', async (done) => {
+      request(app)
+        .post('/profileList')
+        .send({addressList: [user1.address, notUser.address, user3.address]})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
   })
 })
