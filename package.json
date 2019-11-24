@@ -43,7 +43,6 @@
     "js-sha256": "^0.9.0",
     "multihashes": "0.4.14",
     "muport-did-resolver": "^0.3.1",
-    "orbit-db": "0.21.3",
     "orbit-db-access-controllers": "0.2.2",
     "orbit-db-cache-redis": "0.0.3",
     "orbit-db-feedstore": "1.5.1",

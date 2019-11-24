@@ -3,7 +3,6 @@ const axios = require('axios')
 const Util = require('./util')
 const { InvalidInputError, ProfileNotFound } = require('./errors')
 const orbitDBCache = require('orbit-db-cache-redis')
-// const { readDB, getThreadAddress } = require('./orbitdb.js')
 const OrbitDBRead = require('./orbitdb.js')
 const namesTothreadName = (spaceName, threadName) => `3box.thread.${spaceName}.${threadName}`
 const { resolveDID } = require('./util')

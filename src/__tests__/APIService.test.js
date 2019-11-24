@@ -49,15 +49,17 @@ jest.mock('axios', () => {
       }
       return {"status":"error","message":"address not linked"}
     }),
-    post: () => {
-      // Returns all three
-      return { data: {"status":"success",
-                "data":{"rootStoreAddresses":
-                  { '0x08abf5d121998b8bb022156ef972e22f9fb84f3a': "/orbitdb/QmdocSxFGo84tod5DRW5LUeSYcQpG3WVYjB5znx1A5QFMs/12203666f93fdc578232887a4cc1b5a60171f979ca9b5e7845f4f49834d217f11b98.root",
-                    '0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34': "/orbitdb/QmY4CemYGA8vM7o5GxzfpfDkreudDjQJX1fGxkfgDm9pM4/1220abf954f044f07562415931a6986d4fb2dbd0f3c4c2a13ec95d463518a967ac2a.root",
-                    '0x0acc7a1ffe266b2192c8f717141a0cc03672bfba': "/orbitdb/QmeQxxTTVXFTtM9FvtRE4n3shyzevLYzudV6ZMFnzwX7yy/1220a0aad86899dcf21abd133ea7515601c82ebffc1a3eb206504619d0c14a1b2520.root" }
-                }}}
-        }
+    post: (url, payload) => {
+      const addresses = payload.identities
+      const db = { '0x08abf5d121998b8bb022156ef972e22f9fb84f3a': "/orbitdb/QmdocSxFGo84tod5DRW5LUeSYcQpG3WVYjB5znx1A5QFMs/12203666f93fdc578232887a4cc1b5a60171f979ca9b5e7845f4f49834d217f11b98.root",
+                   '0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34': "/orbitdb/QmY4CemYGA8vM7o5GxzfpfDkreudDjQJX1fGxkfgDm9pM4/1220abf954f044f07562415931a6986d4fb2dbd0f3c4c2a13ec95d463518a967ac2a.root",
+                   '0x0acc7a1ffe266b2192c8f717141a0cc03672bfba': "/orbitdb/QmeQxxTTVXFTtM9FvtRE4n3shyzevLYzudV6ZMFnzwX7yy/1220a0aad86899dcf21abd133ea7515601c82ebffc1a3eb206504619d0c14a1b2520.root" }
+      const res = {}
+      addresses.forEach(val => {
+        if (db[val]) res[val] = db[val]
+      })
+      return { data: {"status":"success", "data":{"rootStoreAddresses": res }}}
+    }
   }
 })
 
@@ -239,20 +241,18 @@ describe('APIService', async () => {
         })
     })
 
-    // TODO
-    // it('respond json to thread by address that exists [member thread]', async (done) => {
-    //   request(app)
-    //     .get(`/thread?address=${closedThreadAddress}`)
-    //     .set('Accept', 'application/json')
-    //     // .expect('Content-Type', /json/)
-    //     // .expect(200)
-    //     .then(response => {
-    //       console.log(response)
-    //       // expect(response.body).toMatchSnapshot()
-    //       // expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
-    //       done()
-    //     })
-    // })
+    it('respond json to thread by address that exists [member thread]', async (done) => {
+      request(app)
+        .get(`/thread?address=${closedThreadAddress}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
 
     it('respond json to thread by config that exists [open thread]', async (done) => {
       request(app)
@@ -267,19 +267,18 @@ describe('APIService', async () => {
         })
     })
 
-    // TODO
-    // it('respond json to thread by config that exists [member thread]', async (done) => {
-    //   request(app)
-    //     .get(`/thread?space=spaceone&name=closedu1u2&mod=${user1.spaceoneDid}&members=true`)
-    //     .set('Accept', 'application/json')
-    //     .expect('Content-Type', /json/)
-    //     .expect(200)
-    //     .then(response => {
-    //       expect(response.body).toMatchSnapshot()
-    //       expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
-    //       done()
-    //     })
-    // })
+    it('respond json to thread by config that exists [member thread]', async (done) => {
+      request(app)
+        .get(`/thread?space=spaceone&name=closedu1u2&mod=${user1.spaceoneDid}&members=true`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
 
     //NOTE could return error (404) if not manifest file from readDB instead of empty, to indicate wrong args
     it('respond 404 to thread by config that does NOT exist', async (done) => {
