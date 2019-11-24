@@ -57,7 +57,11 @@
     "yargs": "^13.2.2"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns" : [
+      "src/__tests__/mocks/*",
+      "src/__tests__/test-data/*"
+    ]
   },
   "bin": {
     "3box-pinning-node": "./src/node.js"

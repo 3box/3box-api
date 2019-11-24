@@ -26,9 +26,9 @@ jobs:
           name: test
           command: npm test && codecov
 
-      - run:
-          name: lint
-          command: npm run lint
+      # - run:
+      #     name: lint
+      #     command: npm run lint
 
       - run:
           name: code-coverage

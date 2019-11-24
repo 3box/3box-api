@@ -518,6 +518,32 @@ Object {
 }
 `;
 
+exports[`APIService GET /thread respond json to thread by address that exists [member thread] 1`] = `
+Array [
+  Object {
+    "author": "did:3:bafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam",
+    "message": "two",
+    "postId": "zdpuAy2LN82GXYXTXDjDj9xkcLvBxBH8Qh9gHobgG4pQGov3T",
+    "timestamp": 1574210534,
+  },
+  Object {
+    "author": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "message": "three",
+    "postId": "zdpuAwB2efThG9GQF9rcmAKYT7JT3ZCNq1kcCUw8fNW5jw6D7",
+    "timestamp": 1574210588,
+  },
+]
+`;
+
+exports[`APIService GET /thread respond json to thread by address that exists [member thread] 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
+`;
+
 exports[`APIService GET /thread respond json to thread by address that exists [open thread] 1`] = `
 Array [
   Object {
@@ -544,6 +570,32 @@ Array [
 exports[`APIService GET /thread respond json to thread by address that exists [open thread] 2`] = `
 Object {
   "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
+  "event": "api_get_thread",
+  "origin": "",
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /thread respond json to thread by config that exists [member thread] 1`] = `
+Array [
+  Object {
+    "author": "did:3:bafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam",
+    "message": "two",
+    "postId": "zdpuAy2LN82GXYXTXDjDj9xkcLvBxBH8Qh9gHobgG4pQGov3T",
+    "timestamp": 1574210534,
+  },
+  Object {
+    "author": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "message": "three",
+    "postId": "zdpuAwB2efThG9GQF9rcmAKYT7JT3ZCNq1kcCUw8fNW5jw6D7",
+    "timestamp": 1574210588,
+  },
+]
+`;
+
+exports[`APIService GET /thread respond json to thread by config that exists [member thread] 2`] = `
+Object {
+  "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
   "event": "api_get_thread",
   "origin": "",
   "status": 200,
@@ -582,7 +634,53 @@ Object {
 }
 `;
 
+exports[`APIService POST /profileList respond JSON to addressList with mix profile and not profiles [size 3, response 2] 1`] = `
+Object {
+  "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
+    "a": "u1a",
+    "b": "u1b",
+    "c": "u1c",
+    "d": "u1d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
+  },
+  "0x0acc7a1ffe266b2192c8f717141a0cc03672bfba": Object {
+    "a": "u3a",
+    "b": "u3b",
+    "c": "u3c",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMTAwMTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VQXh5d3Y1QjNXOVUyR1NISG5jVGFrMk00dUNpRWJjOW1OMnVFOEhoaEpHTSJ9.uNAW0E7-5KoDOzvEwybDhDABoHOds6a4g07tfFkueh2HY2qoW0b0_RkVRAdLRp5qRa2f5vDBJLSoPLMX_53jiw",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with mix profile and not profiles [size 3, response 2] 2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "",
+  "status": 200,
+}
+`;
+
 exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 1`] = `
+Object {
+  "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
+    "a": "u1a",
+    "b": "u1b",
+    "c": "u1c",
+    "d": "u1d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "",
+  "status": 200,
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 3] 1`] = `
 Object {
   "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
     "a": "u1a",
@@ -607,7 +705,7 @@ Object {
 }
 `;
 
-exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 2`] = `
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 3] 2`] = `
 Object {
   "event": "api_get_profiles",
   "origin": "",
@@ -635,30 +733,7 @@ Object {
 }
 `;
 
-exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  1`] = `
-Object {
-  "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
-    "a": "u1a",
-    "b": "u1b",
-    "c": "u1c",
-    "d": "u1d",
-    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
-  },
-  "0x0acc7a1ffe266b2192c8f717141a0cc03672bfba": Object {
-    "a": "u3a",
-    "b": "u3b",
-    "c": "u3c",
-    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMTAwMTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VQXh5d3Y1QjNXOVUyR1NISG5jVGFrMk00dUNpRWJjOW1OMnVFOEhoaEpHTSJ9.uNAW0E7-5KoDOzvEwybDhDABoHOds6a4g07tfFkueh2HY2qoW0b0_RkVRAdLRp5qRa2f5vDBJLSoPLMX_53jiw",
-  },
-  "0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34": Object {
-    "a": "u2b",
-    "b": "u2c",
-    "c": "u2d",
-    "d": "u2e",
-    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDk2NTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VM3JLSzd6QUFzd0dXWDc4NjNtNWlZNzhORVBaYzVzZkFFTkNrZWZRTHZGWCJ9.MJzK0inboPPKwdyJrOz9YFQiu30OLwxfTH3AHtuUnKbXO4MvRrlNLZKETQQeznU66dy2GmBTurpscp6LeBKO1Q",
-  },
-}
-`;
+exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  1`] = `Object {}`;
 
 exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  2`] = `
 Object {

@@ -1,87 +1,22 @@
 const request = require('supertest')
 const APIService = require('../APIService')
 const API = require('../node.js')
+const { user1, user2, user3, notUser } = require('./test-data/users')
 
-jest.setTimeout(30000);
-
-const user1 = {
-  address: '0x08abf5d121998b8bb022156ef972e22f9fb84f3a',
-  did: 'did%3Amuport%3AQmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5',
-  spaceoneDid: 'did%3A3%3Abafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje'
-}
-
-const user2 = {
-  address: '0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34',
-  did: 'did%3Amuport%3AQmU3rKK7zAAswGWX7863m5iY78NEPZc5sfAENCkefQLvFX',
-  spaceoneDid: 'did%3A3%3Abafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam'
-}
-
-const user3 = {
-  address: '0x0acc7a1ffe266b2192c8f717141a0cc03672bfba',
-  did: 'did%3Amuport%3AQmUAxywv5B3W9U2GSHHncTak2M4uCiEbc9mN2uE8HhhJGM'
-}
-
-const notUser = {
-  address: '0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c',
-  did: 'did%3Amuport%3AQmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL'
-}
+jest.mock('axios', () => require('./mocks/addressServer'))
+jest.mock('redis', () => require('./mocks/orbitRedisCache'))
 
 // posts by 3 users, first two entry deleted
 const openThreadAddress = '/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open'
 // closed to user 1 and user 2, first entry deleted
 const closedThreadAddress = '/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2'
 
-// MOCK HTTP TO ADDRESS SERVER
-jest.mock('axios', () => {
-  return {
-    get: jest.fn((url) => {
-      if (url.includes('0x08abf5d121998b8bb022156ef972e22f9fb84f3a')) {
-        // https://beta.3box.io/address-server/odbAddress/0x08abf5d121998b8bb022156ef972e22f9fb84f3a
-        return { data: {"status":"success","data":{"rootStoreAddress":"/orbitdb/QmdocSxFGo84tod5DRW5LUeSYcQpG3WVYjB5znx1A5QFMs/12203666f93fdc578232887a4cc1b5a60171f979ca9b5e7845f4f49834d217f11b98.root","did":"did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5"}}}
-      }
-      if (url.includes('0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34')) {
-        // https://beta.3box.io/address-server/odbAddress/0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34
-        return { data: {"status":"success","data":{"rootStoreAddress":"/orbitdb/QmY4CemYGA8vM7o5GxzfpfDkreudDjQJX1fGxkfgDm9pM4/1220abf954f044f07562415931a6986d4fb2dbd0f3c4c2a13ec95d463518a967ac2a.root","did":"did:muport:QmU3rKK7zAAswGWX7863m5iY78NEPZc5sfAENCkefQLvFX"}}}
-      }
-      if (url.includes('0x0acc7a1ffe266b2192c8f717141a0cc03672bfba')) {
-      // https://beta.3box.io/address-server/odbAddress/0x0acc7a1ffe266b2192c8f717141a0cc03672bfba
-        return { data: {"status":"success","data":{"rootStoreAddress":"/orbitdb/QmeQxxTTVXFTtM9FvtRE4n3shyzevLYzudV6ZMFnzwX7yy/1220a0aad86899dcf21abd133ea7515601c82ebffc1a3eb206504619d0c14a1b2520.root","did":"did:muport:QmUAxywv5B3W9U2GSHHncTak2M4uCiEbc9mN2uE8HhhJGM"}}}
-      }
-      return {"status":"error","message":"address not linked"}
-    }),
-    post: (url, payload) => {
-      const addresses = payload.identities
-      const db = { '0x08abf5d121998b8bb022156ef972e22f9fb84f3a': "/orbitdb/QmdocSxFGo84tod5DRW5LUeSYcQpG3WVYjB5znx1A5QFMs/12203666f93fdc578232887a4cc1b5a60171f979ca9b5e7845f4f49834d217f11b98.root",
-                   '0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34': "/orbitdb/QmY4CemYGA8vM7o5GxzfpfDkreudDjQJX1fGxkfgDm9pM4/1220abf954f044f07562415931a6986d4fb2dbd0f3c4c2a13ec95d463518a967ac2a.root",
-                   '0x0acc7a1ffe266b2192c8f717141a0cc03672bfba': "/orbitdb/QmeQxxTTVXFTtM9FvtRE4n3shyzevLYzudV6ZMFnzwX7yy/1220a0aad86899dcf21abd133ea7515601c82ebffc1a3eb206504619d0c14a1b2520.root" }
-      const res = {}
-      addresses.forEach(val => {
-        if (db[val]) res[val] = db[val]
-      })
-      return { data: {"status":"success", "data":{"rootStoreAddresses": res }}}
-    }
-  }
-})
-
-// MOCK ORBIT DB REDIS CACHE
-jest.mock('redis', () => {
-  const Redis = require('ioredis-mock');
-  const orbitCacheMockData = require('./test-data/orbit-cache')
-  const redis = new Redis({
-    data: orbitCacheMockData
-  })
-  return {
-    createClient: () => redis
-  }
-})
-
 describe('APIService', async () => {
   let app
   let api
 
   beforeAll(async () => {
-    // TODO move this arg to env
-    api = await API('./src/__tests__/test-data/ipfs')
+    api = await API()
     api.analytics._track = jest.fn()
     app = api.app
   })
@@ -120,7 +55,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with profile', async function(done) {
       request(app)
-        .get(`/profile?did=${user1.did}`)
+        .get(`/profile?did=${user1.didURI}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -146,7 +81,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with profile and metadata option', async function(done) {
       request(app)
-        .get(`/profile?did=${user1.did}&metadata=true`)
+        .get(`/profile?did=${user1.didURI}&metadata=true`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -173,7 +108,7 @@ describe('APIService', async () => {
     //TODO return 404 instead of invalid did...
     it('respond 404 to did with no profile', async function(done) {
       request(app)
-        .get(`/profile?did=${notUser.did}`)
+        .get(`/profile?did=${notUser.didURI}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -187,7 +122,7 @@ describe('APIService', async () => {
     //NOTE: Could have more specific error, invalid address instead of 404
     it('respond 404 to did passed as address', async function(done) {
       request(app)
-        .get(`/profile?address=${user1.did}`)
+        .get(`/profile?address=${user1.didURI}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -256,7 +191,7 @@ describe('APIService', async () => {
 
     it('respond json to thread by config that exists [open thread]', async (done) => {
       request(app)
-        .get(`/thread?space=spaceone&name=open&mod=${user1.spaceoneDid}&members=false`)
+        .get(`/thread?space=spaceone&name=open&mod=${user1.spaceoneDidURI}&members=false`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -269,7 +204,7 @@ describe('APIService', async () => {
 
     it('respond json to thread by config that exists [member thread]', async (done) => {
       request(app)
-        .get(`/thread?space=spaceone&name=closedu1u2&mod=${user1.spaceoneDid}&members=true`)
+        .get(`/thread?space=spaceone&name=closedu1u2&mod=${user1.spaceoneDidURI}&members=true`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -283,7 +218,7 @@ describe('APIService', async () => {
     //NOTE could return error (404) if not manifest file from readDB instead of empty, to indicate wrong args
     it('respond 404 to thread by config that does NOT exist', async (done) => {
       request(app)
-        .get(`/thread?space=spaceone&name=noexist&mod=${user1.spaceoneDid}&members=false`)
+        .get(`/thread?space=spaceone&name=noexist&mod=${user1.spaceoneDidURI}&members=false`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -312,7 +247,7 @@ describe('APIService', async () => {
     it('respond 500 to thread by config missing args', async (done) => {
       // missing members
       request(app)
-        .get(`/thread?space=api&name=thread&mod=${user1.spaceoneDid}`)
+        .get(`/thread?space=api&name=thread&mod=${user1.spaceoneDidURI}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -405,7 +340,7 @@ describe('APIService', async () => {
 
     it('respond json to space (by DID) that exists', async (done) => {
       request(app)
-        .get(`/space?address=${user1.did}&name=spaceone`)
+        .get(`/space?address=${user1.didURI}&name=spaceone`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -447,7 +382,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with profile', async function(done) {
       request(app)
-        .get(`/list-spaces?did=${user1.did}`)
+        .get(`/list-spaces?did=${user1.didURI}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -474,7 +409,7 @@ describe('APIService', async () => {
     //TODO return 404 instead of 500
     it('respond 404 to did with no profile', async function(done) {
       request(app)
-        .get(`/list-spaces?did=${notUser.did}`)
+        .get(`/list-spaces?did=${notUser.didURI}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -502,7 +437,7 @@ describe('APIService', async () => {
 
     it('respond json to DID with 3box', async function(done) {
       request(app)
-        .get(`/config?did=${user1.did}`)
+        .get(`/config?did=${user1.didURI}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -529,7 +464,7 @@ describe('APIService', async () => {
     // TODO return 404 instead of 500
     it('respond 404 to did with no 3box', async function(done) {
       request(app)
-        .get(`/config?did=${notUser.did}`)
+        .get(`/config?did=${notUser.didURI}`)
         .set('Accept', 'application/json')
         // .expect('Content-Type', /json/)
         .expect(500)
@@ -561,7 +496,7 @@ describe('APIService', async () => {
     it('respond JSON to didList with profile [size 1] ', async (done) => {
       request(app)
         .post('/profileList')
-        .send({didList: ['did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5']})
+        .send({didList: [user1.did]})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
