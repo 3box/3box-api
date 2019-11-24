@@ -1,6 +1,9 @@
 const { ThreadAccessController } = require('3box-orbitdb-plugins')
 const io = require('orbit-db-io')
 
+const MODERATOR = 'MODERATOR'
+const MEMBER = 'MEMBER'
+
 class ThreadAccessReadController extends ThreadAccessController{
   constructor (orbitdb, ipfs, identity, firstModerator, options = {}) {
     super(orbitdb, ipfs, identity, firstModerator, options)
@@ -14,8 +17,8 @@ class ThreadAccessReadController extends ThreadAccessController{
     let moderators = [], members = []
     moderators.push(this._firstModerator)
     Object.entries(this._acList).forEach(entry => {
-      const capability = entry[1].payload.value.capability
-      const id = entry[1].payload.value.id
+      const capability = entry[1].capability
+      const id = entry[1].id
       if (capability === MODERATOR) moderators.push(id)
       if (capability === MEMBER) members.push(id)
     })

@@ -5,7 +5,7 @@
   "main": "src/node.js",
   "scripts": {
     "lint": "./node_modules/.bin/standard --verbose src/**",
-    "test": "rm -rf ./tmp ;  mkdir -p ./tmp/test/one ; jest --forceExit --detectOpenHandles --coverage --runInBand",
+    "test": "IPFS_PATH=./src/__tests__/test-data/ipfs jest --coverage",
     "start": "node ./src/run.js",
     "start:dev": "./node_modules/.bin/nodemon ./src/run.js"
   },
@@ -30,6 +30,7 @@
     "aws-sdk": "2.414.0",
     "axios": "^0.19.0",
     "cids": "0.7.1",
+    "datastore-level": "^0.12.1",
     "datastore-s3": "0.3.0",
     "did-resolver": "0.0.6",
     "dotenv": "^6.2.0",
@@ -41,6 +42,7 @@
     "ipld": "0.25.0",
     "is-ipfs": "^0.6.1",
     "js-sha256": "^0.9.0",
+    "level-mem": "^5.0.1",
     "multihashes": "0.4.14",
     "muport-did-resolver": "^0.3.1",
     "orbit-db": "0.21.3",
@@ -55,7 +57,11 @@
     "yargs": "^13.2.2"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns" : [
+      "src/__tests__/mocks/*",
+      "src/__tests__/test-data/*"
+    ]
   },
   "bin": {
     "3box-pinning-node": "./src/node.js"
