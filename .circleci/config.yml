@@ -76,15 +76,15 @@ workflows:
           filters:
             branches:
               only: develop
-      # - aws-ecr/build_and_push_image:
-      #     name: push-prod-image
-      #     repo: 3box-api
-      #     tag: latest
-      #     requires:
-      #       - test
-      #     filters:
-      #       branches:
-      #         only: master
+      - aws-ecr/build_and_push_image:
+          name: push-prod-image
+          repo: 3box-api
+          tag: latest
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
       - deploy-dev:
           requires:
             - push-dev-image
