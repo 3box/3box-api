@@ -106,7 +106,7 @@ describe('APIService', async () => {
     })
 
     //TODO return 404 instead of invalid did...
-    it('respond 404 to did with no profile', async function(done) {
+    it('respond 500 (TODO change 404) to did with no profile', async function(done) {
       request(app)
         .get(`/profile?did=${notUser.didURI}`)
         .set('Accept', 'application/json')
@@ -216,7 +216,7 @@ describe('APIService', async () => {
     })
 
     //NOTE could return error (404) if not manifest file from readDB instead of empty, to indicate wrong args
-    it('respond 404 to thread by config that does NOT exist', async (done) => {
+    it('respond 200 (empty array, TODO 404) to thread by config that does NOT exist', async (done) => {
       request(app)
         .get(`/thread?space=spaceone&name=noexist&mod=${user1.spaceoneDidURI}&members=false`)
         .set('Accept', 'application/json')
@@ -230,9 +230,9 @@ describe('APIService', async () => {
     })
 
     //NOTE could return error (404) if not manifest file from readDB instead of empty, to indicate wrong args
-    it('respond 404 to thread by address that does NOT exist', async (done) => {
+    it('respond 200 (empty array, TODO 404) to thread by address that does NOT exist', async (done) => {
       request(app)
-        .get(('/thread?address=/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.notexist'))
+        .get('/thread?address=/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.notexist')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -243,14 +243,14 @@ describe('APIService', async () => {
         })
     })
 
-    // NOTE return specific error, intead empty 200
-    it('respond 500 to thread by config missing args', async (done) => {
+    // TODO better error code
+    it('respond 404 to thread by config missing args', async (done) => {
       // missing members
       request(app)
         .get(`/thread?space=api&name=thread&mod=${user1.spaceoneDidURI}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(200)
+        .expect(404)
         .then(response => {
           expect(response.body).toMatchSnapshot()
           expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
@@ -259,7 +259,7 @@ describe('APIService', async () => {
     })
 
     // NOTE return specific error, instead empty 200
-    it('respond 500 to thread address malformed', async (done) => {
+    it('respond 200 to thread address malformed', async (done) => {
       request(app)
         .get(`/thread?address=zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread`)
         .set('Accept', 'application/json')
@@ -314,13 +314,15 @@ describe('APIService', async () => {
         })
     })
 
-    it('respond 404 to space that does not exists in existing user', async (done) => {
+    // TODO can easily return 404, but current service returns empty 200
+    it('respond 200 (TODO 404) to space that does not exists in existing user', async (done) => {
       request(app)
         .get(`/space?address=${user1.address}&name=notaspace`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(404)
+        .expect(200)
         .then(response => {
+          expect(response.body).toMatchSnapshot()
           expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
@@ -340,18 +342,19 @@ describe('APIService', async () => {
 
     it('respond json to space (by DID) that exists', async (done) => {
       request(app)
-        .get(`/space?address=${user1.didURI}&name=spaceone`)
+        .get(`/space?did=${user1.didURI}&name=spaceone`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(404)
+        .expect(200)
         .then(response => {
+          expect(response.body).toMatchSnapshot()
           expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
           done()
         })
     })
 
     // NOTE, instead of returning empty space, return specific error
-    it('respond 401 to missing args', async (done) => {
+    it('respond 200 (TODO 401) to missing args', async (done) => {
       request(app)
         .get(`/space?address=${user1.address}`)
         .set('Accept', 'application/json')
@@ -407,7 +410,7 @@ describe('APIService', async () => {
     })
 
     //TODO return 404 instead of 500
-    it('respond 404 to did with no profile', async function(done) {
+    it('respond 500 (TODO 404) to did with no profile', async function(done) {
       request(app)
         .get(`/list-spaces?did=${notUser.didURI}`)
         .set('Accept', 'application/json')
@@ -477,7 +480,6 @@ describe('APIService', async () => {
   })
 
   describe('POST /profileList', () => {
-    // TODO don't base response on address server response, or align those responses for testing
 
     it('respond JSON to addressList with profile [size 1]', async (done) => {
       request(app)

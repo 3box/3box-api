@@ -33,7 +33,7 @@ class AnalyticsAPI {
     const path = new Url(res.req.url).pathname
     const event = reqEventMap[path]
     if (!event) return
-    const origin = domain(res.req.headers.host)
+    const origin = domain(res.req.headers.origin) || 'none'
     const track = {
       status: res.statusCode,
       event,

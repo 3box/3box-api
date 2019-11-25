@@ -16,7 +16,8 @@ module.exports = {
     if (url.includes(user1.address)) return response(user1)
     if (url.includes(user2.address)) return response(user2)
     if (url.includes(user3.address)) return response(user3)
-    return {"status":"error","message":"address not linked"}
+    // return {"status":"error","message":"address not linked"}
+    throw new Error({"status":"error","message":"address not linked"})
   },
   post: (url, payload) => {
     const res = {}
