@@ -11,16 +11,16 @@ exports[`APIService GET /config respond 404 to address with no 3box 2`] = `
 Object {
   "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 404,
 }
 `;
 
 exports[`APIService GET /config respond 404 to did with no 3box 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 500,
 }
 `;
@@ -53,9 +53,9 @@ Timestamp: 1574209201",
 
 exports[`APIService GET /config respond json to DID with 3box 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -90,7 +90,7 @@ exports[`APIService GET /config respond json to address with 3box 2`] = `
 Object {
   "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -106,16 +106,16 @@ exports[`APIService GET /list-spaces respond 404 to address with no 3box 2`] = `
 Object {
   "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 404,
 }
 `;
 
-exports[`APIService GET /list-spaces respond 404 to did with no profile 1`] = `
+exports[`APIService GET /list-spaces respond 500 (TODO 404) to did with no profile 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 500,
 }
 `;
@@ -129,9 +129,9 @@ Array [
 
 exports[`APIService GET /list-spaces respond json to DID with profile 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -147,7 +147,7 @@ exports[`APIService GET /list-spaces respond json to address with profile 2`] = 
 Object {
   "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -161,10 +161,10 @@ Object {
 
 exports[`APIService GET /profile respond 400 to missing required args 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 400,
 }
 `;
@@ -180,8 +180,8 @@ exports[`APIService GET /profile respond 404 to address with no profile 2`] = `
 Object {
   "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 404,
 }
 `;
@@ -197,28 +197,28 @@ exports[`APIService GET /profile respond 404 to did passed as address 2`] = `
 Object {
   "address": "did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 404,
 }
 `;
 
-exports[`APIService GET /profile respond 404 to did with no profile 1`] = `
+exports[`APIService GET /profile respond 500 (TODO change 404) to did with no profile 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 500,
 }
 `;
 
 exports[`APIService GET /profile respond 500 to address passed as did 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 500,
 }
 `;
@@ -235,9 +235,9 @@ Object {
 
 exports[`APIService GET /profile respond json to DID with profile 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -246,23 +246,23 @@ Object {
 exports[`APIService GET /profile respond json to DID with profile and metadata option 1`] = `
 Object {
   "a": Object {
-    "timeStamp": 1574209205664,
+    "timestamp": 1574209205,
     "value": "u1a",
   },
   "b": Object {
-    "timeStamp": 1574209215357,
+    "timestamp": 1574209215,
     "value": "u1b",
   },
   "c": Object {
-    "timeStamp": 1574209304228,
+    "timestamp": 1574209304,
     "value": "u1c",
   },
   "d": Object {
-    "timeStamp": 1574209331317,
+    "timestamp": 1574209331,
     "value": "u1d",
   },
   "proof_did": Object {
-    "timeStamp": 1574209205609,
+    "timestamp": 1574209205,
     "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
   },
 }
@@ -270,9 +270,9 @@ Object {
 
 exports[`APIService GET /profile respond json to DID with profile and metadata option 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -292,7 +292,7 @@ exports[`APIService GET /profile respond json to address with profile (add and c
 Object {
   "address": "0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -312,7 +312,7 @@ exports[`APIService GET /profile respond json to address with profile 2`] = `
 Object {
   "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -321,23 +321,23 @@ Object {
 exports[`APIService GET /profile respond json to address with profile and metadata option 1`] = `
 Object {
   "a": Object {
-    "timeStamp": 1574209205664,
+    "timestamp": 1574209205,
     "value": "u1a",
   },
   "b": Object {
-    "timeStamp": 1574209215357,
+    "timestamp": 1574209215,
     "value": "u1b",
   },
   "c": Object {
-    "timeStamp": 1574209304228,
+    "timestamp": 1574209304,
     "value": "u1c",
   },
   "d": Object {
-    "timeStamp": 1574209331317,
+    "timestamp": 1574209331,
     "value": "u1d",
   },
   "proof_did": Object {
-    "timeStamp": 1574209205609,
+    "timestamp": 1574209205,
     "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
   },
 }
@@ -347,21 +347,34 @@ exports[`APIService GET /profile respond json to address with profile and metada
 Object {
   "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
 `;
 
-exports[`APIService GET /space respond 401 to missing args 1`] = `Object {}`;
+exports[`APIService GET /space respond 200 (TODO 401) to missing args 1`] = `Object {}`;
 
-exports[`APIService GET /space respond 401 to missing args 2`] = `
+exports[`APIService GET /space respond 200 (TODO 401) to missing args 2`] = `
 Object {
   "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_space",
   "name": undefined,
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /space respond 200 (TODO 404) to space that does not exists in existing user 1`] = `Object {}`;
+
+exports[`APIService GET /space respond 200 (TODO 404) to space that does not exists in existing user 2`] = `
+Object {
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
+  "event": "api_get_space",
+  "name": "notaspace",
+  "origin": "none",
+  "profile_existed": false,
   "status": 200,
 }
 `;
@@ -371,31 +384,40 @@ Object {
   "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_get_space",
   "name": "notaspace",
-  "origin": "",
-  "profile_existed": undefined,
-  "status": 404,
-}
-`;
-
-exports[`APIService GET /space respond 404 to space that does not exists in existing user 1`] = `
-Object {
-  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
-  "event": "api_get_space",
-  "name": "notaspace",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 404,
 }
 `;
 
 exports[`APIService GET /space respond json to space (by DID) that exists 1`] = `
 Object {
-  "address": "did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5",
+  "e": "u1e",
+  "f": "u1f",
+  "g": "u1g",
+  "thread-/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2": Object {
+    "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": true,
+    "name": "3box.thread.spaceone.closedu1u2",
+  },
+  "thread-/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open": Object {
+    "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": false,
+    "name": "3box.thread.spaceone.open",
+  },
+}
+`;
+
+exports[`APIService GET /space respond json to space (by DID) that exists 2`] = `
+Object {
+  "address": "did",
   "event": "api_get_space",
   "name": "spaceone",
-  "origin": "",
-  "profile_existed": undefined,
-  "status": 404,
+  "origin": "none",
+  "profile_existed": true,
+  "status": 200,
 }
 `;
 
@@ -424,7 +446,7 @@ Object {
   "address": "0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34",
   "event": "api_get_space",
   "name": "spaceone",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -437,7 +459,7 @@ Object {
   "address": "0x0acc7a1ffe266b2192c8f717141a0cc03672bfba",
   "event": "api_get_space",
   "name": "spacetwo",
-  "origin": "",
+  "origin": "none",
   "profile_existed": false,
   "status": 200,
 }
@@ -468,53 +490,57 @@ Object {
   "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_space",
   "name": "spaceone",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 404 to thread by address that does NOT exist 1`] = `Array []`;
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by address that does NOT exist 1`] = `Array []`;
 
-exports[`APIService GET /thread respond 404 to thread by address that does NOT exist 2`] = `
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by address that does NOT exist 2`] = `
 Object {
   "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.notexist",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 404 to thread by config that does NOT exist 1`] = `Array []`;
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by config that does NOT exist 1`] = `Array []`;
 
-exports[`APIService GET /thread respond 404 to thread by config that does NOT exist 2`] = `
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by config that does NOT exist 2`] = `
 Object {
   "address": "/orbitdb/zdpuAxRWMYyHoySyF7QCgGAuwdNumAv3j5qrtvoJtNpywSQUN/3box.thread.spaceone.noexist",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 500 to thread address malformed 1`] = `Array []`;
+exports[`APIService GET /thread respond 200 to thread address malformed 1`] = `Array []`;
 
-exports[`APIService GET /thread respond 500 to thread address malformed 2`] = `
+exports[`APIService GET /thread respond 200 to thread address malformed 2`] = `
 Object {
   "address": "zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 500 to thread by config missing args 1`] = `Array []`;
-
-exports[`APIService GET /thread respond 500 to thread by config missing args 2`] = `
+exports[`APIService GET /thread respond 404 to thread by config missing args 1`] = `
 Object {
-  "address": "/orbitdb/zdpuApMNMAMdsnGWRRrw4yeZ2rHsUHNzYS1JoHkL8ZKH1jmgJ/3box.thread.api.thread",
+  "message": "Must pass address parameter, or all of space, name, mod, and members parameters",
+  "status": "error",
+}
+`;
+
+exports[`APIService GET /thread respond 404 to thread by config missing args 2`] = `
+Object {
   "event": "api_get_thread",
-  "origin": "",
-  "status": 200,
+  "origin": "none",
+  "status": 404,
 }
 `;
 
@@ -539,7 +565,7 @@ exports[`APIService GET /thread respond json to thread by address that exists [m
 Object {
   "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -571,7 +597,7 @@ exports[`APIService GET /thread respond json to thread by address that exists [o
 Object {
   "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -597,7 +623,7 @@ exports[`APIService GET /thread respond json to thread by config that exists [me
 Object {
   "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -629,7 +655,7 @@ exports[`APIService GET /thread respond json to thread by config that exists [op
 Object {
   "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -655,7 +681,7 @@ Object {
 exports[`APIService POST /profileList respond JSON to addressList with mix profile and not profiles [size 3, response 2] 2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -675,7 +701,7 @@ Object {
 exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -708,7 +734,7 @@ Object {
 exports[`APIService POST /profileList respond JSON to addressList with profile [size 3] 2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -728,7 +754,7 @@ Object {
 exports[`APIService POST /profileList respond JSON to didList with profile [size 1]  2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -738,7 +764,7 @@ exports[`APIService POST /profileList respond empty JSON to addressList with NO 
 exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;

@@ -88,8 +88,8 @@ class APIService {
       errorToResponse(res, e, 'Error: Failed to load profile')
     }
 
-    const profile_existed = profile && Object.entries(profile).length !== 0
-    res.analytics = { address, profile_existed }
+    const profile_existed = Boolean(profile && Object.entries(profile).length !== 0)
+    res.analytics = { address: address || 'did', profile_existed }
     next()
   }
 
@@ -109,7 +109,7 @@ class APIService {
       errorToResponse(res, e, 'Error: Failed to load spaces')
     }
 
-    res.analytics = { address }
+    res.analytics = { address: address || 'did' }
     next()
   }
 
@@ -129,7 +129,8 @@ class APIService {
          return entry.odbAddress.split('.')[2] === spaceName
        })
        if (!spaceEntry) {
-         errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
+         res.json({})
+         // errorToResponse(res, {statusCode: 404, message: 'Error: Space not found'})
        } else {
          const spaceAddress = spaceEntry.odbAddress
          space = await this._readDB(spaceAddress)
@@ -148,17 +149,24 @@ class APIService {
        errorToResponse(res, e, 'Error: Failed to load space')
      }
 
-     const spaceExisted = space && Object.entries(space).length !== 0
+     const spaceExisted = Boolean(space && Object.entries(space).length !== 0)
      // TODO change existed key?
-     res.analytics = { address: address, name: spaceName, profile_existed: spaceExisted }
+     res.analytics = { address: address || 'did', name: spaceName, profile_existed: spaceExisted }
      next()
   }
 
   // TODO error handilng/missing params
   async getThread (req, res, next) {
     let { address, space, name, mod, members } = req.query
+    let memberExist = typeof members !== "undefined"
     members = members === 'true'
-    const usingConfig = !!(space && name && mod)
+    const usingConfig = !!(space && name && mod && memberExist)
+
+    if (!usingConfig && !address) {
+      errorToResponse(res, { statusCode: 404, message: 'Must pass address parameter, or all of space, name, mod, and members parameters' })
+      next()
+      return
+    }
 
     try {
       if (usingConfig) {
@@ -188,12 +196,11 @@ class APIService {
 
     try {
       const rootStoreAddress = await this.queryToRootStoreAddress({ address, did })
-      const entries = await this._readDB(rootStoreAddress, true)
+      const entries = await this._readDB(rootStoreAddress)
       let conf = {}
 
       for (let i = 0; i < entries.length; i++) {
-        const entry = entries[i]
-        const value = entry.payload.value
+        const value = entries[i]
         if (value.type === rootEntryTypes.SPACE) {
           if (!conf.spaces) conf.spaces = {}
           const name = value.odbAddress.split('.')[2]
@@ -211,7 +218,7 @@ class APIService {
       errorToResponse(res, e, 'Error: Failed to load config')
     }
 
-    res.analytics = { address }
+    res.analytics = { address: address || 'did' }
     next()
   }
 
@@ -221,7 +228,6 @@ class APIService {
     const origin = req.headers.origin
 
     if (!addressList && !didList) {
-      this.analytics.trackGetProfiles(400, origin)
       res.status(400).send('Error: AddressList not given')
       next()
       return
@@ -332,7 +338,13 @@ class APIService {
     if (metadata) {
       // For now we return everything,
       // later we might filter the metadata (metadata="value,timestamp" for example)
-      return profile
+      const parsedProfile = {}
+      Object.entries(profile)
+          .forEach(([k, v]) => {
+            const timestamp = Math.floor(v.timeStamp / 1000)
+            parsedProfile[k] = { value: v.value, timestamp }
+          })
+      return parsedProfile
     } else {
       // process back the profile into a for without metadata
       const r = {}
