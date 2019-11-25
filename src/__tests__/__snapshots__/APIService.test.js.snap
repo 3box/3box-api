@@ -9,18 +9,18 @@ Object {
 
 exports[`APIService GET /config respond 404 to address with no 3box 2`] = `
 Object {
-  "address": "0xD72e013d96f97412d524CaCB9AEfA885598E28d6",
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 404,
 }
 `;
 
 exports[`APIService GET /config respond 404 to did with no 3box 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 500,
 }
 `;
@@ -32,17 +32,20 @@ Object {
       "message": "Create a new 3Box profile
 
 - 
-Your unique profile ID is did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL 
-Timestamp: 1571945163",
-      "signature": "0x7bb809455e8291160bcb426d80b6a5adea0b6f8e4b61ba5d18d10019f6a17f111325c824071304b2de36a72e9eb005de6af840a2578ccc2fe850068b3a9e94d91b",
-      "timestamp": 1571945163,
+Your unique profile ID is did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5 
+Timestamp: 1574209201",
+      "signature": "0x09ba54f1c92afffe68da735fcc5815fb1ab26eddd82ecb539cfe8ec6a0a771a301d1a1bfc1807cb276dc273548a92a40ed849289434803b65552a87d191486a51c",
+      "timestamp": 1574209201,
       "type": "ethereum-eoa",
       "version": 1,
     },
   ],
   "spaces": Object {
-    "api": Object {
-      "DID": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "spaceone": Object {
+      "DID": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    },
+    "spacetwo": Object {
+      "DID": "did:3:bafyreied4b6jjmcsvtfj25e47lvzpw3kexua36swgtfxx3pvqvs2qn7ksq",
     },
   },
 }
@@ -50,9 +53,9 @@ Timestamp: 1571945163",
 
 exports[`APIService GET /config respond json to DID with 3box 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -64,17 +67,20 @@ Object {
       "message": "Create a new 3Box profile
 
 - 
-Your unique profile ID is did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL 
-Timestamp: 1571945163",
-      "signature": "0x7bb809455e8291160bcb426d80b6a5adea0b6f8e4b61ba5d18d10019f6a17f111325c824071304b2de36a72e9eb005de6af840a2578ccc2fe850068b3a9e94d91b",
-      "timestamp": 1571945163,
+Your unique profile ID is did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5 
+Timestamp: 1574209201",
+      "signature": "0x09ba54f1c92afffe68da735fcc5815fb1ab26eddd82ecb539cfe8ec6a0a771a301d1a1bfc1807cb276dc273548a92a40ed849289434803b65552a87d191486a51c",
+      "timestamp": 1574209201,
       "type": "ethereum-eoa",
       "version": 1,
     },
   ],
   "spaces": Object {
-    "api": Object {
-      "DID": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+    "spaceone": Object {
+      "DID": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    },
+    "spacetwo": Object {
+      "DID": "did:3:bafyreied4b6jjmcsvtfj25e47lvzpw3kexua36swgtfxx3pvqvs2qn7ksq",
     },
   },
 }
@@ -82,9 +88,9 @@ Timestamp: 1571945163",
 
 exports[`APIService GET /config respond json to address with 3box 2`] = `
 Object {
-  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_config",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -98,48 +104,50 @@ Object {
 
 exports[`APIService GET /list-spaces respond 404 to address with no 3box 2`] = `
 Object {
-  "address": "0xD72e013d96f97412d524CaCB9AEfA885598E28d6",
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 404,
 }
 `;
 
-exports[`APIService GET /list-spaces respond 404 to did with no profile 1`] = `
+exports[`APIService GET /list-spaces respond 500 (TODO 404) to did with no profile 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 500,
 }
 `;
 
 exports[`APIService GET /list-spaces respond json to DID with profile 1`] = `
 Array [
-  "api",
+  "spaceone",
+  "spacetwo",
 ]
 `;
 
 exports[`APIService GET /list-spaces respond json to DID with profile 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
 exports[`APIService GET /list-spaces respond json to address with profile 1`] = `
 Array [
-  "api",
+  "spaceone",
+  "spacetwo",
 ]
 `;
 
 exports[`APIService GET /list-spaces respond json to address with profile 2`] = `
 Object {
-  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_list_spaces",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
@@ -153,10 +161,10 @@ Object {
 
 exports[`APIService GET /profile respond 400 to missing required args 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 400,
 }
 `;
@@ -170,10 +178,10 @@ Object {
 
 exports[`APIService GET /profile respond 404 to address with no profile 2`] = `
 Object {
-  "address": "0xD72e013d96f97412d524CaCB9AEfA885598E28d6",
+  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 404,
 }
 `;
@@ -187,49 +195,49 @@ Object {
 
 exports[`APIService GET /profile respond 404 to did passed as address 2`] = `
 Object {
-  "address": "did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL",
+  "address": "did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 404,
 }
 `;
 
-exports[`APIService GET /profile respond 404 to did with no profile 1`] = `
+exports[`APIService GET /profile respond 500 (TODO change 404) to did with no profile 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 500,
 }
 `;
 
 exports[`APIService GET /profile respond 500 to address passed as did 1`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 500,
 }
 `;
 
 exports[`APIService GET /profile respond json to DID with profile 1`] = `
 Object {
-  "a": "a",
-  "b": "b",
-  "c": "c",
-  "d": "d",
-  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  "a": "u1a",
+  "b": "u1b",
+  "c": "u1c",
+  "d": "u1d",
+  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
 }
 `;
 
 exports[`APIService GET /profile respond json to DID with profile 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -237,19 +245,54 @@ Object {
 
 exports[`APIService GET /profile respond json to DID with profile and metadata option 1`] = `
 Object {
-  "a": "a",
-  "b": "b",
-  "c": "c",
-  "d": "d",
-  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  "a": Object {
+    "timestamp": 1574209205,
+    "value": "u1a",
+  },
+  "b": Object {
+    "timestamp": 1574209215,
+    "value": "u1b",
+  },
+  "c": Object {
+    "timestamp": 1574209304,
+    "value": "u1c",
+  },
+  "d": Object {
+    "timestamp": 1574209331,
+    "value": "u1d",
+  },
+  "proof_did": Object {
+    "timestamp": 1574209205,
+    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
+  },
 }
 `;
 
 exports[`APIService GET /profile respond json to DID with profile and metadata option 2`] = `
 Object {
-  "address": undefined,
+  "address": "did",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /profile respond json to address with profile (add and change keys) 1`] = `
+Object {
+  "a": "u2b",
+  "b": "u2c",
+  "c": "u2d",
+  "d": "u2e",
+  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDk2NTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VM3JLSzd6QUFzd0dXWDc4NjNtNWlZNzhORVBaYzVzZkFFTkNrZWZRTHZGWCJ9.MJzK0inboPPKwdyJrOz9YFQiu30OLwxfTH3AHtuUnKbXO4MvRrlNLZKETQQeznU66dy2GmBTurpscp6LeBKO1Q",
+}
+`;
+
+exports[`APIService GET /profile respond json to address with profile (add and change keys) 2`] = `
+Object {
+  "address": "0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34",
+  "event": "api_get_profile",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -257,19 +300,19 @@ Object {
 
 exports[`APIService GET /profile respond json to address with profile 1`] = `
 Object {
-  "a": "a",
-  "b": "b",
-  "c": "c",
-  "d": "d",
-  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  "a": "u1a",
+  "b": "u1b",
+  "c": "u1c",
+  "d": "u1d",
+  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
 }
 `;
 
 exports[`APIService GET /profile respond json to address with profile 2`] = `
 Object {
-  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
@@ -278,236 +321,379 @@ Object {
 exports[`APIService GET /profile respond json to address with profile and metadata option 1`] = `
 Object {
   "a": Object {
-    "timeStamp": 1572016307892,
-    "value": "a",
+    "timestamp": 1574209205,
+    "value": "u1a",
   },
   "b": Object {
-    "timeStamp": 1572016310508,
-    "value": "b",
+    "timestamp": 1574209215,
+    "value": "u1b",
   },
   "c": Object {
-    "timeStamp": 1572280683432,
-    "value": "c",
+    "timestamp": 1574209304,
+    "value": "u1c",
   },
   "d": Object {
-    "timeStamp": 1572302718011,
-    "value": "d",
+    "timestamp": 1574209331,
+    "value": "u1d",
   },
   "proof_did": Object {
-    "timeStamp": 1571945167809,
-    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+    "timestamp": 1574209205,
+    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
   },
 }
 `;
 
 exports[`APIService GET /profile respond json to address with profile and metadata option 2`] = `
 Object {
-  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_profile",
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
 `;
 
-exports[`APIService GET /space respond 401 to missing args 1`] = `Object {}`;
+exports[`APIService GET /space respond 200 (TODO 401) to missing args 1`] = `Object {}`;
 
-exports[`APIService GET /space respond 401 to missing args 2`] = `
+exports[`APIService GET /space respond 200 (TODO 401) to missing args 2`] = `
 Object {
-  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_space",
   "name": undefined,
-  "origin": "",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
 `;
 
-exports[`APIService GET /space respond 404 to space that does not exists 1`] = `
+exports[`APIService GET /space respond 200 (TODO 404) to space that does not exists in existing user 1`] = `Object {}`;
+
+exports[`APIService GET /space respond 200 (TODO 404) to space that does not exists in existing user 2`] = `
+Object {
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
+  "event": "api_get_space",
+  "name": "notaspace",
+  "origin": "none",
+  "profile_existed": false,
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /space respond 404 to space that does not exists and for user that does not exist 1`] = `
 Object {
   "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
   "event": "api_get_space",
   "name": "notaspace",
-  "origin": "",
-  "profile_existed": undefined,
+  "origin": "none",
+  "profile_existed": false,
   "status": 404,
 }
 `;
 
 exports[`APIService GET /space respond json to space (by DID) that exists 1`] = `
 Object {
-  "address": "did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL",
+  "e": "u1e",
+  "f": "u1f",
+  "g": "u1g",
+  "thread-/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2": Object {
+    "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": true,
+    "name": "3box.thread.spaceone.closedu1u2",
+  },
+  "thread-/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open": Object {
+    "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": false,
+    "name": "3box.thread.spaceone.open",
+  },
+}
+`;
+
+exports[`APIService GET /space respond json to space (by DID) that exists 2`] = `
+Object {
+  "address": "did",
   "event": "api_get_space",
-  "name": "api",
-  "origin": "",
-  "profile_existed": undefined,
-  "status": 404,
+  "name": "spaceone",
+  "origin": "none",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /space respond json to space (by address) that exists (add and change keys) 1`] = `
+Object {
+  "e": "u2f",
+  "f": "u2g",
+  "g": "u2h",
+  "thread-/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2": Object {
+    "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": true,
+    "name": "3box.thread.spaceone.closedu1u2",
+  },
+  "thread-/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open": Object {
+    "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": false,
+    "name": "3box.thread.spaceone.open",
+  },
+}
+`;
+
+exports[`APIService GET /space respond json to space (by address) that exists (add and change keys) 2`] = `
+Object {
+  "address": "0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34",
+  "event": "api_get_space",
+  "name": "spaceone",
+  "origin": "none",
+  "profile_existed": true,
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /space respond json to space (by address) that exists (but empty) 1`] = `Object {}`;
+
+exports[`APIService GET /space respond json to space (by address) that exists (but empty) 2`] = `
+Object {
+  "address": "0x0acc7a1ffe266b2192c8f717141a0cc03672bfba",
+  "event": "api_get_space",
+  "name": "spacetwo",
+  "origin": "none",
+  "profile_existed": false,
+  "status": 200,
 }
 `;
 
 exports[`APIService GET /space respond json to space (by address) that exists 1`] = `
 Object {
-  "a": "a",
-  "b": "b",
-  "c": "c",
-  "d": "d",
-  "thread-/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread": Object {
-    "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
-    "firstModerator": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
+  "e": "u1e",
+  "f": "u1f",
+  "g": "u1g",
+  "thread-/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2": Object {
+    "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "members": true,
+    "name": "3box.thread.spaceone.closedu1u2",
+  },
+  "thread-/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open": Object {
+    "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
+    "firstModerator": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
     "members": false,
-    "name": "3box.thread.api.thread",
+    "name": "3box.thread.spaceone.open",
   },
 }
 `;
 
 exports[`APIService GET /space respond json to space (by address) that exists 2`] = `
 Object {
-  "address": "0x1eE6aE029c6D99fF3a810CF8EAA31D193c89ec9c",
+  "address": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
   "event": "api_get_space",
-  "name": "api",
-  "origin": "",
+  "name": "spaceone",
+  "origin": "none",
   "profile_existed": true,
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 404 to thread by address that does NOT exist 1`] = `Array []`;
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by address that does NOT exist 1`] = `Array []`;
 
-exports[`APIService GET /thread respond 404 to thread by address that does NOT exist 2`] = `
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by address that does NOT exist 2`] = `
 Object {
   "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.notexist",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 404 to thread by config that does NOT exist 1`] = `Array []`;
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by config that does NOT exist 1`] = `Array []`;
 
-exports[`APIService GET /thread respond 404 to thread by config that does NOT exist 2`] = `
+exports[`APIService GET /thread respond 200 (empty array, TODO 404) to thread by config that does NOT exist 2`] = `
 Object {
-  "address": "/orbitdb/zdpuAybfe7w58wQrXs9aZYZRbcNLCBW25gydYPf1E8N9CvZ4J/3box.thread.api.noexist",
+  "address": "/orbitdb/zdpuAxRWMYyHoySyF7QCgGAuwdNumAv3j5qrtvoJtNpywSQUN/3box.thread.spaceone.noexist",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 500 to thread address malformed 1`] = `Array []`;
+exports[`APIService GET /thread respond 200 to thread address malformed 1`] = `Array []`;
 
-exports[`APIService GET /thread respond 500 to thread address malformed 2`] = `
+exports[`APIService GET /thread respond 200 to thread address malformed 2`] = `
 Object {
   "address": "zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond 500 to thread by config missing args 1`] = `
+exports[`APIService GET /thread respond 404 to thread by config missing args 1`] = `
+Object {
+  "message": "Must pass address parameter, or all of space, name, mod, and members parameters",
+  "status": "error",
+}
+`;
+
+exports[`APIService GET /thread respond 404 to thread by config missing args 2`] = `
+Object {
+  "event": "api_get_thread",
+  "origin": "none",
+  "status": 404,
+}
+`;
+
+exports[`APIService GET /thread respond json to thread by address that exists [member thread] 1`] = `
 Array [
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "a",
-    "postId": "zdpuAoKx6NKUG3S86M7NFFP2kBXUXeFY3dFahzQDXtod9gqwz",
-    "timestamp": 1572284917,
+    "author": "did:3:bafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam",
+    "message": "two",
+    "postId": "zdpuAy2LN82GXYXTXDjDj9xkcLvBxBH8Qh9gHobgG4pQGov3T",
+    "timestamp": 1574210534,
   },
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "b",
-    "postId": "zdpuB1jbNgQvKdkp223uBnkCjmPVESLXPLtfEkNx3DZGMDb3S",
-    "timestamp": 1572461635,
-  },
-  Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "c",
-    "postId": "zdpuAnF3Ph9bhikC7mfgZKCS59oCssmhout8xWQZti9vC5q9W",
-    "timestamp": 1572461638,
+    "author": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "message": "three",
+    "postId": "zdpuAwB2efThG9GQF9rcmAKYT7JT3ZCNq1kcCUw8fNW5jw6D7",
+    "timestamp": 1574210588,
   },
 ]
 `;
 
-exports[`APIService GET /thread respond 500 to thread by config missing args 2`] = `
+exports[`APIService GET /thread respond json to thread by address that exists [member thread] 2`] = `
 Object {
-  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond json to thread by address that exists 1`] = `
+exports[`APIService GET /thread respond json to thread by address that exists [open thread] 1`] = `
 Array [
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "a",
-    "postId": "zdpuAoKx6NKUG3S86M7NFFP2kBXUXeFY3dFahzQDXtod9gqwz",
-    "timestamp": 1572284917,
+    "author": "did:3:bafyreicfmi6qew3ezmkmnykpoo55qtewpckm2oho4oeb6as6q3xfiygmcy",
+    "message": "three",
+    "postId": "zdpuAqkruLB8tKXjAY1u8ov1jxvDpFWVmMsypUbuATvCF127F",
+    "timestamp": 1574210108,
   },
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "b",
-    "postId": "zdpuB1jbNgQvKdkp223uBnkCjmPVESLXPLtfEkNx3DZGMDb3S",
-    "timestamp": 1572461635,
+    "author": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "message": "four",
+    "postId": "zdpuAvgpY6BmcW7r3nMomURGr5C5YkZcG1z6XkT25rXcdNuzm",
+    "timestamp": 1574210248,
   },
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "c",
-    "postId": "zdpuAnF3Ph9bhikC7mfgZKCS59oCssmhout8xWQZti9vC5q9W",
-    "timestamp": 1572461638,
+    "author": "did:3:bafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam",
+    "message": "five",
+    "postId": "zdpuAoGMPVygwuMjdiNNqvaPcZ2c8sge5QrHRKuEXzHw86YpC",
+    "timestamp": 1574210293,
   },
 ]
 `;
 
-exports[`APIService GET /thread respond json to thread by address that exists 2`] = `
+exports[`APIService GET /thread respond json to thread by address that exists [open thread] 2`] = `
 Object {
-  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService GET /thread respond json to thread by config that exists 1`] = `
+exports[`APIService GET /thread respond json to thread by config that exists [member thread] 1`] = `
 Array [
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "a",
-    "postId": "zdpuAoKx6NKUG3S86M7NFFP2kBXUXeFY3dFahzQDXtod9gqwz",
-    "timestamp": 1572284917,
+    "author": "did:3:bafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam",
+    "message": "two",
+    "postId": "zdpuAy2LN82GXYXTXDjDj9xkcLvBxBH8Qh9gHobgG4pQGov3T",
+    "timestamp": 1574210534,
   },
   Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "b",
-    "postId": "zdpuB1jbNgQvKdkp223uBnkCjmPVESLXPLtfEkNx3DZGMDb3S",
-    "timestamp": 1572461635,
-  },
-  Object {
-    "author": "did:3:bafyreigi4zax3eh3xisz7xor72hm47bbhxkod7562elvmkc257xmzo4wvy",
-    "message": "c",
-    "postId": "zdpuAnF3Ph9bhikC7mfgZKCS59oCssmhout8xWQZti9vC5q9W",
-    "timestamp": 1572461638,
+    "author": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "message": "three",
+    "postId": "zdpuAwB2efThG9GQF9rcmAKYT7JT3ZCNq1kcCUw8fNW5jw6D7",
+    "timestamp": 1574210588,
   },
 ]
 `;
 
-exports[`APIService GET /thread respond json to thread by config that exists 2`] = `
+exports[`APIService GET /thread respond json to thread by config that exists [member thread] 2`] = `
 Object {
-  "address": "/orbitdb/zdpuAtmJDmsVPeKdJiLt3nFweLN3u7GEc8kQzNqyBKUkcP9qc/3box.thread.api.thread",
+  "address": "/orbitdb/zdpuAnq4FhPsq8iMzy4HX7LKUV8MbNjb8oRmk9ghjdhGdRtQJ/3box.thread.spaceone.closedu1u2",
   "event": "api_get_thread",
-  "origin": "",
+  "origin": "none",
+  "status": 200,
+}
+`;
+
+exports[`APIService GET /thread respond json to thread by config that exists [open thread] 1`] = `
+Array [
+  Object {
+    "author": "did:3:bafyreicfmi6qew3ezmkmnykpoo55qtewpckm2oho4oeb6as6q3xfiygmcy",
+    "message": "three",
+    "postId": "zdpuAqkruLB8tKXjAY1u8ov1jxvDpFWVmMsypUbuATvCF127F",
+    "timestamp": 1574210108,
+  },
+  Object {
+    "author": "did:3:bafyreicplngujln6wnmhsmsxx34axxgg5xootcq4zkicz7x7o2kub7pdje",
+    "message": "four",
+    "postId": "zdpuAvgpY6BmcW7r3nMomURGr5C5YkZcG1z6XkT25rXcdNuzm",
+    "timestamp": 1574210248,
+  },
+  Object {
+    "author": "did:3:bafyreifihp3yf4igdmi2woiqo2wymz2vdt2pwbnwjlvum4aly3277bbaam",
+    "message": "five",
+    "postId": "zdpuAoGMPVygwuMjdiNNqvaPcZ2c8sge5QrHRKuEXzHw86YpC",
+    "timestamp": 1574210293,
+  },
+]
+`;
+
+exports[`APIService GET /thread respond json to thread by config that exists [open thread] 2`] = `
+Object {
+  "address": "/orbitdb/zdpuB18U3dEMq4G4hgShc9Nd1rJM1ZB1JWhsAG8CkmpFHxA6u/3box.thread.spaceone.open",
+  "event": "api_get_thread",
+  "origin": "none",
+  "status": 200,
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with mix profile and not profiles [size 3, response 2] 1`] = `
+Object {
+  "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
+    "a": "u1a",
+    "b": "u1b",
+    "c": "u1c",
+    "d": "u1d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
+  },
+  "0x0acc7a1ffe266b2192c8f717141a0cc03672bfba": Object {
+    "a": "u3a",
+    "b": "u3b",
+    "c": "u3c",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMTAwMTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VQXh5d3Y1QjNXOVUyR1NISG5jVGFrMk00dUNpRWJjOW1OMnVFOEhoaEpHTSJ9.uNAW0E7-5KoDOzvEwybDhDABoHOds6a4g07tfFkueh2HY2qoW0b0_RkVRAdLRp5qRa2f5vDBJLSoPLMX_53jiw",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with mix profile and not profiles [size 3, response 2] 2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "none",
   "status": 200,
 }
 `;
 
 exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 1`] = `
 Object {
-  "0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c": Object {
-    "a": "a",
-    "b": "b",
-    "c": "c",
-    "d": "d",
-    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
+    "a": "u1a",
+    "b": "u1b",
+    "c": "u1c",
+    "d": "u1d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
   },
 }
 `;
@@ -515,19 +701,52 @@ Object {
 exports[`APIService POST /profileList respond JSON to addressList with profile [size 1] 2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
+  "status": 200,
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 3] 1`] = `
+Object {
+  "0x08abf5d121998b8bb022156ef972e22f9fb84f3a": Object {
+    "a": "u1a",
+    "b": "u1b",
+    "c": "u1c",
+    "d": "u1d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
+  },
+  "0x0acc7a1ffe266b2192c8f717141a0cc03672bfba": Object {
+    "a": "u3a",
+    "b": "u3b",
+    "c": "u3c",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMTAwMTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VQXh5d3Y1QjNXOVUyR1NISG5jVGFrMk00dUNpRWJjOW1OMnVFOEhoaEpHTSJ9.uNAW0E7-5KoDOzvEwybDhDABoHOds6a4g07tfFkueh2HY2qoW0b0_RkVRAdLRp5qRa2f5vDBJLSoPLMX_53jiw",
+  },
+  "0x26618f5c6ea223cfdf94c033ccdc8eccbf990a34": Object {
+    "a": "u2b",
+    "b": "u2c",
+    "c": "u2d",
+    "d": "u2e",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDk2NTYsImlzcyI6ImRpZDptdXBvcnQ6UW1VM3JLSzd6QUFzd0dXWDc4NjNtNWlZNzhORVBaYzVzZkFFTkNrZWZRTHZGWCJ9.MJzK0inboPPKwdyJrOz9YFQiu30OLwxfTH3AHtuUnKbXO4MvRrlNLZKETQQeznU66dy2GmBTurpscp6LeBKO1Q",
+  },
+}
+`;
+
+exports[`APIService POST /profileList respond JSON to addressList with profile [size 3] 2`] = `
+Object {
+  "event": "api_get_profiles",
+  "origin": "none",
   "status": 200,
 }
 `;
 
 exports[`APIService POST /profileList respond JSON to didList with profile [size 1]  1`] = `
 Object {
-  "did:muport:QmQAnachTJXMVHKa5Nu3mZNn5jGrJ9TvHJde3NSp8J4qzL": Object {
-    "a": "a",
-    "b": "b",
-    "c": "c",
-    "d": "d",
-    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
+  "did:muport:QmXfH6B8yosXTfyWBziBSY5zZpqjVbsJN18yk56EpmYDb5": Object {
+    "a": "u1a",
+    "b": "u1b",
+    "c": "u1c",
+    "d": "u1d",
+    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
   },
 }
 `;
@@ -535,27 +754,17 @@ Object {
 exports[`APIService POST /profileList respond JSON to didList with profile [size 1]  2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;
 
-exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  1`] = `
-Object {
-  "0x1ee6ae029c6d99ff3a810cf8eaa31d193c89ec9c": Object {
-    "a": "a",
-    "b": "b",
-    "c": "c",
-    "d": "d",
-    "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzE5NDUxNjcsImlzcyI6ImRpZDptdXBvcnQ6UW1RQW5hY2hUSlhNVkhLYTVOdTNtWk5uNWpHcko5VHZISmRlM05TcDhKNHF6TCJ9.hvlmZnE3uucuDje7xF13wRM-skAQU_EWGQNLv8Bg-naXhKs4RXAwtt6QEAuNAyCoyUi5YTWboVXvuk2ZN4kvKw",
-  },
-}
-`;
+exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  1`] = `Object {}`;
 
 exports[`APIService POST /profileList respond empty JSON to addressList with NO profile [size 1]  2`] = `
 Object {
   "event": "api_get_profiles",
-  "origin": "",
+  "origin": "none",
   "status": 200,
 }
 `;

@@ -1,16 +1,10 @@
-const argv = require('yargs').argv
-const path = require('path')
 const { RedisCache, NullCache } = require('./cache')
 const APIService = require('./APIService')
 const analytics = require('./analytics')
 const { createIPFSRead, createS3Repo, createRepo } = require('./ipfs')
 const OrbitDBRedisCache = require('./orbitdbCache')
 
-const env = process.env.NODE_ENV || 'development'
-require('dotenv').config({ path: path.resolve(process.cwd(), `.env.${env}`) })
-
 const ADDRESS_SERVER_URL = process.env.ADDRESS_SERVER_URL
-const ORBITDB_PATH = process.env.ORBITDB_PATH
 const IPFS_PATH =  process.env.IPFS_PATH
 const CACHE_REDIS_PATH = process.env.REDIS_PATH
 const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY
@@ -29,9 +23,8 @@ const  s3Config  = {
 
 const isS3Repo = Boolean(process.env.AWS_BUCKET_NAME)
 
-// TODO remove ipfsPATH
-async function API (ipfsPath) {
-  const repo = isS3Repo ? await createS3Repo(ipfsPath || IPFS_PATH, s3Config) : await createRepo(ipfsPath || IPFS_PATH)
+async function API () {
+  const repo = isS3Repo ? await createS3Repo(IPFS_PATH, s3Config) : await createRepo(IPFS_PATH)
   const ipfs = await createIPFSRead(repo)
   const cache = CACHE_REDIS_PATH && ORBIT_REDIS_PATH ? new RedisCache({ host: CACHE_REDIS_PATH }, { host: ORBIT_REDIS_PATH }, DAYS15) : null
   const orbitCache = new OrbitDBRedisCache(ORBIT_REDIS_PATH)
