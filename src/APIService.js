@@ -59,7 +59,6 @@ class APIService {
   async _readDB (address, threadMetaData) {
     if (!this.cache) return this.orbitdb.readDB(address, threadMetaData)
     const cacheHit = await this.cache.read(address.split('/orbitdb/')[1])
-    if (cacheHit) console.log(`cachehit - ${address}`)
     if (cacheHit) return cacheHit
     const db = await this.orbitdb.readDB(address, threadMetaData)
     this.cache.write(address.split('/orbitdb/')[1], db)

@@ -34,12 +34,13 @@ class AnalyticsAPI {
     const event = reqEventMap[path]
     if (!event) return
     const origin = domain(res.req.headers.origin) || 'none'
+    const status = res.statusCode
+    const properties = Object.assign({ origin, status }, res.analytics || {})
     const track = {
-      status: res.statusCode,
       event,
-      origin
+      properties
     }
-    this._track(Object.assign(track, res.analytics || {}), origin)
+    this._track(track, origin)
   }
 }
 
