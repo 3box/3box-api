@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.0.1 - 2019-11-26
+
+Fix analytics properties object
+
 ## v1.0.0 - 2019-11-25
 
 Request/Response parity with current service
