@@ -249,6 +249,28 @@ Object {
 }
 `;
 
+exports[`APIService GET /profile respond json to 3ID (space) DID with profile 1`] = `
+Object {
+  "a": "u1a",
+  "b": "u1b",
+  "c": "u1c",
+  "d": "u1d",
+  "proof_did": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1NzQyMDkyMDUsImlzcyI6ImRpZDptdXBvcnQ6UW1YZkg2Qjh5b3NYVGZ5V0J6aUJTWTV6WnBxalZic0pOMTh5azU2RXBtWURiNSJ9.XAUXvvd9k2NXTDwh_HMStYHn8NTzsX0rF_5w8rHrlg3XUMxF2D9wW9NG-A0TvmqeTDWPwUjYYXv4zXVVEiIAFQ",
+}
+`;
+
+exports[`APIService GET /profile respond json to 3ID (space) DID with profile 2`] = `
+Object {
+  "event": "api_get_profile",
+  "properties": Object {
+    "address": "did",
+    "origin": "none",
+    "profile_existed": true,
+    "status": 200,
+  },
+}
+`;
+
 exports[`APIService GET /profile respond json to DID with profile 1`] = `
 Object {
   "a": "u1a",

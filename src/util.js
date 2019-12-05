@@ -4,6 +4,8 @@ const sha256 = require('js-sha256').sha256
 const resolveDID = require('did-resolver').default
 const EC = elliptic.ec
 const ec = new EC('secp256k1')
+const dagPB = require('ipld-dag-pb')
+const ipfsUnixFS = require('ipfs-unixfs')
 
 class Util {
   /**
@@ -45,7 +47,10 @@ class Util {
     const managementKey = doc.publicKey.find(key => key.id.includes('#managementKey')).ethereumAddress
     const encryptionKey = doc.publicKey.find(key => key.id.includes('#encryptionKey')).publicKeyBase64
     const muportdoc = Util.createMuportDocument(signingKey, managementKey, encryptionKey)
-    let docHash = (await ipfs.add(Buffer.from(JSON.stringify(muportdoc))))[0].hash
+    const unixfs = new ipfsUnixFS('file', Buffer.from(JSON.stringify(muportdoc)))
+    const node = new dagPB.DAGNode(unixfs.marshal())
+    const cid = await ipfs.dag.put(node, { onlyHash:true, format: 'dag-pb', hashAlg: 'sha2-256' }) //not all args needed here, but in ipfs yes
+    const docHash = cid.toBaseEncodedString()
     return 'did:muport:' + docHash
   }
 
