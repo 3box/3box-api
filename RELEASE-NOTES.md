@@ -1,5 +1,10 @@
 # Release Notes
 
+## v1.0.2 - 2019-12-6
+
+fix: resolve profiles for space 3ID
+fix: profile and thread calls throwing error which require identity verify funcs
+
 ## v1.0.1 - 2019-11-26
 
 Fix analytics properties object
