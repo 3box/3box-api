@@ -91,9 +91,9 @@ workflows:
           filters:
             branches:
               only: develop
-      # - deploy-prod:
-      #     requires:
-      #       - push-prod-image
-      #     filters:
-      #       branches:
-      #         only: master
+      - deploy-prod:
+          requires:
+            - push-prod-image
+          filters:
+            branches:
+              only: master

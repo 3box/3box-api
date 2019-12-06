@@ -1,6 +1,6 @@
 {
   "name": "3box-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "3box",
   "main": "src/node.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/3box/3box-api#readme",
   "dependencies": {
-    "3box-orbitdb-plugins": "^1.0.5",
+    "3box-orbitdb-plugins": "^1.0.6",
     "3id-resolver": "^0.0.4",
     "analytics-node": "^3.3.0",
     "aws-sdk": "2.414.0",
@@ -39,7 +39,9 @@
     "ipfs-block-service": "0.16.0",
     "ipfs-log": "4.3.6",
     "ipfs-repo": "^0.28.0",
+    "ipfs-unixfs": "^0.2.0",
     "ipld": "0.25.0",
+    "ipld-dag-pb": "^0.18.1",
     "is-ipfs": "^0.6.1",
     "js-sha256": "^0.9.0",
     "level-mem": "^5.0.1",
@@ -49,7 +51,6 @@
     "orbit-db-access-controllers": "0.2.2",
     "orbit-db-cache-redis": "0.0.3",
     "orbit-db-feedstore": "1.5.1",
-    "orbit-db-identity-provider": "0.1.6",
     "orbit-db-io": "0.1.1",
     "orbit-db-kvstore": "1.5.1",
     "redis": "^2.8.0",
@@ -58,7 +59,7 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testPathIgnorePatterns" : [
+    "testPathIgnorePatterns": [
       "src/__tests__/mocks/*",
       "src/__tests__/test-data/*"
     ]

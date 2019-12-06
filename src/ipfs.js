@@ -49,7 +49,8 @@ async function createIPFSRead (repo) {
 }
 
 const ipfs = (ipld) => {
-  const dagGet = async (cid, isCAT) => {
+  const dagGet = async (cid) => {
+    if (!CID.isCID(cid)) cid = new CID(cid)
     const obj = await ipld.get(cid)
     return { value: obj }
   }
@@ -77,8 +78,7 @@ const ipfs = (ipld) => {
       }
     },
     cat: async (ipfsHash) => {
-      const cid = new CID(ipfsHash)
-      const result = await dagGet(cid, true)
+      const result = await dagGet(ipfsHash)
       const dagNode = result.value
       const buffString = dagNode.toJSON().data.toString()
       // TODO what are the prefixes/suffixes encoding? format?

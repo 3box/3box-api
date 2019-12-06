@@ -66,6 +66,19 @@ describe('APIService', async () => {
         })
     })
 
+    it('respond json to 3ID (space) DID with profile', async function(done) {
+      request(app)
+        .get(`/profile?did=${encodeURIComponent(user1.spaceoneDid)}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          expect(api.analytics._track.mock.calls[0][0]).toMatchSnapshot()
+          done()
+        })
+    })
+
     it('respond json to address with profile and metadata option', async function(done) {
       request(app)
         .get(`/profile?address=${user1.address}&metadata=true`)
