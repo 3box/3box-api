@@ -1,6 +1,5 @@
 const io = require('orbit-db-io')
 const Log = require('ipfs-log')
-const IdentityProvider = require('orbit-db-identity-provider')
 // Store index
 const kvStoreIndex = require('orbit-db-kvstore/src/KeyValueIndex.js')
 const feedStoreIndex = require('orbit-db-feedstore/src/FeedIndex.js')
@@ -23,7 +22,10 @@ AccessControllers.addAccessController({ AccessController: ThreadAccessController
 AccessControllers.addAccessController({ AccessController: ModeratorAccessController })
 
 const amount = -1
-const nullIdentity = {}
+const nullIdentity = {
+  provider: { verify: () => true,
+              verifyIdentity: () => true }
+}
 
 class OrbitDBRead {
   constructor (orbitCache, ipfs) {
