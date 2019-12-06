@@ -3,7 +3,7 @@ const Url = require('url-parse')
 const sha256 = require('js-sha256').sha256
 
 const hash = str => str === null ? null : Buffer.from(sha256.digest(str)).toString('hex')
-const domain = str => new Url(str).hostname
+const domainParse = str => new Url(str).hostname
 
 const reqEventMap = {
   '/profile': 'api_get_profile',
@@ -33,7 +33,10 @@ class AnalyticsAPI {
     const path = new Url(res.req.url).pathname
     const event = reqEventMap[path]
     if (!event) return
-    const origin = domain(res.req.headers.origin) || 'none'
+    const domain = domainParse(res.req.headers.origin)
+    let origin = domain || 'none'
+    // ie '35553f0a-cbf5-4cbd-8364-497f2109e016' temp fix for random origin ids, probably from extension (mm?)
+    if (domain.split('-').length === 5) origin = 'randomid'
     const status = res.statusCode
     const properties = Object.assign({ origin, status }, res.analytics || {})
     const track = {
