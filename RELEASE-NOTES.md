@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.0.3 - 2019-12-6
+
+fix: analytics uniques fix, getting random ids as origins, likely from extensions
+
 ## v1.0.2 - 2019-12-6
 
 fix: resolve profiles for space 3ID
