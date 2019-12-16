@@ -1,6 +1,6 @@
 {
   "name": "3box-api",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "3box",
   "main": "src/node.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "exectimer": "^2.2.1",
     "express": "^4.16.4",
     "ipfs-block-service": "0.16.0",
-    "ipfs-log": "4.3.6",
+    "ipfs-log": "^4.4.0",
     "ipfs-repo": "^0.28.0",
     "ipfs-unixfs": "^0.2.0",
     "ipld": "0.25.0",
@@ -47,12 +47,12 @@
     "level-mem": "^5.0.1",
     "multihashes": "0.4.14",
     "muport-did-resolver": "^0.3.1",
-    "orbit-db": "0.21.3",
+    "orbit-db": "^0.22.1",
     "orbit-db-access-controllers": "0.2.2",
     "orbit-db-cache-redis": "0.0.3",
-    "orbit-db-feedstore": "1.5.1",
+    "orbit-db-feedstore": "^1.6.0",
     "orbit-db-io": "0.1.1",
-    "orbit-db-kvstore": "1.5.1",
+    "orbit-db-kvstore": "^1.6.0",
     "redis": "^2.8.0",
     "url-parse": "^1.4.7",
     "yargs": "^13.2.2"
