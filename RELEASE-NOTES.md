@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.1.0 - 2019-12-16
+
+feat: upgrade ipfs log which includes performance improvements
+
 ## v1.0.3 - 2019-12-6
 
 fix: analytics uniques fix, getting random ids as origins, likely from extensions
