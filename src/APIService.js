@@ -27,7 +27,12 @@ class APIService {
     this.app = express()
     this.app.use(express.json())
 
-    this.app.use(expressLogger)
+    this.app.use((req, res, next) => {
+      if (req.path == '/healthcheck') {
+        return next()
+      }
+      return expressLogger(req, res, next)
+    })
 
     this.app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*')

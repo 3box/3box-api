@@ -7,8 +7,10 @@ const expressLogger = Logger({
   includesFn: (req, res) => {
     return {
       origin: req.get('origin'),
+      path: req.route.path,
     }
   },
+  format: () => "",
   excludes: [
     "body",
     "http-version",
