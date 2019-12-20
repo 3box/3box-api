@@ -9,6 +9,7 @@ const { resolveDID } = require('./util')
 const registerMuportResolver = require('muport-did-resolver')
 const register3idResolver = require('3id-resolver')
 const io = require('orbit-db-io')
+const expressLogger = require('./middleware/expressLogger')
 
 const rootEntryTypes = {
   SPACE: 'space',
@@ -25,6 +26,14 @@ class APIService {
 
     this.app = express()
     this.app.use(express.json())
+
+    this.app.use((req, res, next) => {
+      if (req.path == '/healthcheck') {
+        return next()
+      }
+      return expressLogger(req, res, next)
+    })
+
     this.app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*')
       next()
