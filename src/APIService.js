@@ -10,6 +10,7 @@ const registerMuportResolver = require('muport-did-resolver')
 const register3idResolver = require('3id-resolver')
 const io = require('orbit-db-io')
 const expressLogger = require('./middleware/expressLogger')
+const CID = require('cids')
 
 const rootEntryTypes = {
   SPACE: 'space',
@@ -46,6 +47,7 @@ class APIService {
     this.app.get('/list-spaces', this.listSpaces.bind(this))
     this.app.get('/config', this.getConfig.bind(this))
     this.app.get('/thread', this.getThread.bind(this))
+    this.app.get('/did-doc', this.getDidDoc.bind(this))
 
     // After response
     this.app.use((req, res, next) => {
@@ -263,6 +265,26 @@ class APIService {
     }, {})
 
     res.json(parsed)
+    next()
+  }
+
+  async getDidDoc (req, res, next) {
+    let { cid } = req.query
+    let doc
+
+    try {
+      cid = new CID(cid)
+      if (cid.version === 1) {
+        doc = await this.ipfs.dag.get(cid)
+      } else {
+        const obj = await this.ipfs.cat(cid)
+        doc = { value: JSON.parse(obj) }
+      }
+      res.json(doc)
+    } catch (e) {
+      errorToResponse(res, e, 'Error: Failed to resolve DID document')
+    }
+
     next()
   }
 

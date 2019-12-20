@@ -564,4 +564,40 @@ describe('APIService', async () => {
         })
     })
   })
+
+  describe('GET /did-doc', () => {
+    it('respond json did-doc to CID (V1) that exists ', async function(done) {
+      request(app)
+        .get(`/did-doc?cid=${user1.spaceoneDid.split(':').pop()}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond json did-doc to CID (V0) that exists ', async function(done) {
+      request(app)
+        .get(`/did-doc?cid=${user1.did.split(':').pop()}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+          expect(response.body).toMatchSnapshot()
+          done()
+        })
+    })
+
+    it('respond 404 to CID that does not exist', async function(done) {
+      request(app)
+        .get(`/did-doc?cid=${notUser.did.split(':').pop()}`)
+        .set('Accept', 'application/json')
+        .expect(500)
+        .then(response => {
+          done()
+        })
+    })
+  })
 })
