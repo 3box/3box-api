@@ -103,6 +103,50 @@ Object {
 }
 `;
 
+exports[`APIService GET /did-doc respond json did-doc to CID (V0) that exists  1`] = `
+Object {
+  "value": Object {
+    "asymEncryptionKey": "A58Pl+ui53NuKOA3F+jCyscd+Ruh+x5NknzKB1m3+1Y=",
+    "managementKey": "0x08abf5d121998b8bb022156ef972e22f9fb84f3a",
+    "signingKey": "023599055bd33f14908f1e061382df4954fcc5f6d5345e1321470ea8a53393f9a3",
+    "version": 1,
+  },
+}
+`;
+
+exports[`APIService GET /did-doc respond json did-doc to CID (V1) that exists  1`] = `
+Object {
+  "value": Object {
+    "@context": "https://w3id.org/did/v1",
+    "authentication": Array [
+      Object {
+        "publicKey": "did:3:GENESIS#subSigningKey",
+        "type": "Secp256k1SignatureAuthentication2018",
+      },
+    ],
+    "id": "did:3:GENESIS",
+    "proof": Object {
+      "alg": "ES256K",
+      "signature": "gmYX6Bff9BhjSNPKbiRI-ygKIJlHZ8XQpx88UKLiqZrJY1_wJ9enpX4WYoHxZjCnTnOH5emjxtDI_SsXEZYiXw",
+    },
+    "publicKey": Array [
+      Object {
+        "id": "did:3:GENESIS#subSigningKey",
+        "publicKeyHex": "042fe0c86ccdb4301143eaf946fbbd444e692b66ee64f5cab68385159258f40853417713dac1cf731b209d8b99f60bdb48d49d3f3c9a941b52608d9dc9165f39ba",
+        "type": "Secp256k1VerificationKey2018",
+      },
+      Object {
+        "id": "did:3:GENESIS#subEncryptionKey",
+        "publicKeyBase64": "s+dcT2IIoiQ3ujexqmioisSVwx14+WnaIOImmvgcslM=",
+        "type": "Curve25519EncryptionPublicKey",
+      },
+    ],
+    "root": "did:3:bafyreiax34k2rru2n5fkfe34bcalqqueezgzgjpn3quhedkzrss2b4rdka",
+    "space": "spaceone",
+  },
+}
+`;
+
 exports[`APIService GET /list-spaces respond 404 to address with no 3box 1`] = `
 Object {
   "message": "Address link not found, address does not have a 3Box or is malformed",
