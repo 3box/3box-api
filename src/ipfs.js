@@ -21,16 +21,14 @@ async function createRepo(path) {
   return openRepo(repo)
 }
 
-async function createS3Repo(path, bucketConfig) {
-  if (!path|| !bucketConfig.bucket) {
+async function createS3Repo(path, S3Config) {
+  if (!path|| !S3Config.bucket) {
     throw new Error('Invalid IPFS + S3 configuration')
   }
 
   const repo = ipfsRepo({
     path: path,
-    bucket: bucketConfig.bucket,
-    accessKeyId: bucketConfig.accessKeyId,
-    secretAccessKey: bucketConfig.secretAccessKey
+    ...S3Config,
   })
 
   return openRepo(repo)
