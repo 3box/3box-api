@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.2.0 - 2020-1-3
+
+ feat: add did-doc endpoint consuming CIDs
+
 ## v1.1.1 - 2019-12-20
 
 feat: add simple request logging
