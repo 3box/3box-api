@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.2.1 - 2020-01-07
+
+feat: allow configuration of S3 client options for endpoint, signature version and address style
+
 ## v1.2.0 - 2020-1-3
 
  feat: add did-doc endpoint consuming CIDs
