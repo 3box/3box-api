@@ -15,10 +15,13 @@ const DAYS15 = 60 * 60 * 24 * 15 // 15 day ttl
 const analyticsClient = analytics(SEGMENT_WRITE_KEY, ANALYTICS_ACTIVE)
 const orbitCacheRedisOpts = ORBIT_REDIS_PATH ? { host: ORBIT_REDIS_PATH } : null
 
-const  s3Config  = {
+const s3Config = {
   bucket: process.env.AWS_BUCKET_NAME,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  endpoint: process.env.AWS_S3_ENDPOINT,
+  s3ForcePathStyle: process.env.AWS_S3_ADDRESSING_STYLE === 'path',
+  signatureVersion: process.env.AWS_S3_SIGNATURE_VERSION,
 }
 
 const isS3Repo = Boolean(process.env.AWS_BUCKET_NAME)
