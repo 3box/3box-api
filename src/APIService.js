@@ -252,15 +252,22 @@ class APIService {
     const profilePromiseArray = Object.keys(rootStoreAddresses)
       .filter((key) => !!rootStoreAddresses[key])
       .map(async (key) => {
-        const rootStoreAddress = rootStoreAddresses[key]
-        const publicDBAddress = await this._rootToPublicDB(rootStoreAddress)
-        const profile = await this._readDB(publicDBAddress)
-        return { address: key, profile: this._mungeProfile(profile, metadata) }
+        try {
+          const rootStoreAddress = rootStoreAddresses[key]
+          const publicDBAddress = await this._rootToPublicDB(rootStoreAddress)
+          const profile = await this._readDB(publicDBAddress)
+          return { address: key, profile: this._mungeProfile(profile, metadata) }
+        } catch (err) {
+          console.error('Error: Failed to load profile', { address: key, err })
+          return {}
+        }
       })
 
     const profiles = await Promise.all(profilePromiseArray)
     const parsed = profiles.reduce((acc, val) => {
-      acc[val.address] = val.profile
+      if (val.address && val.profile) {
+        acc[val.address] = val.profile
+      }
       return acc
     }, {})
 
