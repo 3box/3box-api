@@ -1,5 +1,9 @@
 # Release Notes
 
+## v1.3.1 - 2020-03-24
+
+fix: ignore individual profile fetch failures when processing batch fetches
+
 ## v1.3.0 - 2020-01-28
 
 feat: dependency upgrades for orbit 0.23 and ipfs 0.40 support
