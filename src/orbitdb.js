@@ -11,6 +11,9 @@ const dbTypeIndex = {
   feed: feedStoreIndex
 }
 
+const { Resolver } = require('did-resolver')
+const get3IdResolver = require('3id-resolver').getResolver
+const getMuportResolver = require('muport-did-resolver').getResolver
 const AccessControllers = require('orbit-db-access-controllers')
 const ThreadAccessController = require('./threadAccessRead.js')
 const {
@@ -31,6 +34,10 @@ class OrbitDBRead {
   constructor (orbitCache, ipfs) {
     this._orbitCache = orbitCache
     this._ipfs = ipfs
+    this._resolver = new Resolver({
+      ...get3IdResolver(ipfs),
+      ...getMuportResolver(ipfs)
+    })
   }
 
   async readDB (address, threadMetaData = false) {
@@ -49,9 +56,17 @@ class OrbitDBRead {
    let acOpts
    // TODO handle case better, could have spaces called threads
    if (address.includes('thread') && !address.includes('_access') ) {
-     acOpts = { acAddress, readDB: this.readDB.bind(this)}
+      acOpts = {
+        acAddress,
+        readDB: this.readDB.bind(this)
+      }
    } else {
-     acOpts =  {skipManifest: true, type: 'legacy-ipfs-3box', write:[]}
+      acOpts = {
+        skipManifest: true,
+        type: 'legacy-ipfs-3box',
+        write:[],
+        resolver: this._resolver
+      }
    }
 
    const accessController = await AccessControllers.resolve({'_ipfs': this._ipfs}, acAddress, acOpts)
@@ -91,7 +106,12 @@ class OrbitDBRead {
  }
 
  async dbAddress (accessController, dbName, dbType, format) {
-   const accessControllerAddress = await AccessControllers.create({'_ipfs': this._ipfs}, accessController.type, accessController)
+   const accessControllerAddress = await AccessControllers.create({
+      '_ipfs': this._ipfs,
+      determineAddress: (name, type, opts) => {
+        return this.dbAddress(opts.accessController, name, type, opts.format)
+      }
+    }, accessController.type, accessController)
    const manifestHash = await createDBManifest(this._ipfs, dbName, dbType, accessControllerAddress, {format})
    return path.join('/orbitdb', manifestHash, dbName)
  }
