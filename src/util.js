@@ -1,7 +1,9 @@
 const elliptic = require('elliptic')
 const Multihash = require('multihashes')
 const sha256 = require('js-sha256').sha256
-const resolveDID = require('did-resolver').default
+const { Resolver } = require('did-resolver')
+const get3IdResolver = require('3id-resolver').getResolver
+const getMuportResolver = require('muport-did-resolver').getResolver
 const EC = elliptic.ec
 const ec = new EC('secp256k1')
 const dagPB = require('ipld-dag-pb')
@@ -21,14 +23,10 @@ class Util {
     return ec.keyFromPublic(key, 'hex').getPublic(false, 'hex')
   }
 
-  static async didExtractSigningKey (did, doc) {
-    doc = doc || await Util.resolveDID(did)
+  static async didExtractSigningKey (did, { doc, resolver } = {}) {
+    doc = doc || await resolver.resolve(did)
     const signingKey = doc.publicKey.find(key => key.id.includes('#signingKey')).publicKeyHex
     return signingKey
-  }
-
-  static async resolveDID (did) {
-    return resolveDID(did)
   }
 
   static createMuportDocument (signingKey, managementKey, asymEncryptionKey) {
@@ -41,7 +39,11 @@ class Util {
   }
 
   static async threeIDToMuport (did, { ipfs, doc }) {
-    doc = doc || await Util.resolveDID(did)
+    const resolver = new Resolver({
+      ...get3IdResolver(ipfs),
+      ...getMuportResolver(ipfs)
+    })
+    doc = doc || await resolver.resolve(did)
     let signingKey = doc.publicKey.find(key => key.id.includes('#signingKey')).publicKeyHex
     signingKey = ec.keyFromPublic(Buffer.from(signingKey, 'hex')).getPublic(true, 'hex')
     const managementKey = doc.publicKey.find(key => key.id.includes('#managementKey')).ethereumAddress
@@ -55,9 +57,14 @@ class Util {
   }
 
   static async didToRootStoreAddress (did, { orbitdb, ipfs }) {
+    ipfs = ipfs || orbitdb._ipfs
     const is3ID = did.includes(':3:')
-    const doc = await Util.resolveDID(did)
-    let signingKey = await Util.didExtractSigningKey(did, doc)
+    const resolver = new Resolver({
+      ...get3IdResolver(ipfs),
+      ...getMuportResolver(ipfs)
+    })
+    const doc = await resolver.resolve(did)
+    let signingKey = await Util.didExtractSigningKey(did, { doc })
     // 3id signingKey already uncompressed in doc
     signingKey = is3ID ? signingKey : Util.uncompressSECP256K1Key(signingKey)
     // muport did require for address derivation

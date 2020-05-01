@@ -5,9 +5,6 @@ const { InvalidInputError, ProfileNotFound } = require('./errors')
 const orbitDBCache = require('orbit-db-cache-redis')
 const OrbitDBRead = require('./orbitdb.js')
 const namesTothreadName = (spaceName, threadName) => `3box.thread.${spaceName}.${threadName}`
-const { resolveDID } = require('./util')
-const registerMuportResolver = require('muport-did-resolver')
-const register3idResolver = require('3id-resolver')
 const io = require('orbit-db-io')
 const expressLogger = require('./middleware/expressLogger')
 const CID = require('cids')
@@ -55,9 +52,6 @@ class APIService {
     })
 
     this.orbitdb = new OrbitDBRead(orbitCache, ipfs)
-
-    registerMuportResolver(this.ipfs)
-    register3idResolver(this.ipfs)
   }
 
   start () {
