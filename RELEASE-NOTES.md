@@ -1,5 +1,10 @@
 # Release Notes
 
+## v1.4.0 - 2020-05-01
+
+chore: upgrade did-resolver libraries
+feat: add smoke tests to CI
+
 ## v1.3.1 - 2020-03-24
 
 fix: ignore individual profile fetch failures when processing batch fetches
