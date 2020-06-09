@@ -6,3 +6,6 @@
 Temp repo, move to serverless if still possible. Run errors in serverless offline, so implemented here for now.
 
 Implements all api calls except thread calls at the moment. 
+
+## Maintainers
+[@zachferland](https://github.com/zachferland)
