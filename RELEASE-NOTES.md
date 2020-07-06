@@ -1,5 +1,8 @@
 # Release Notes
 
+## v1.4.1 - 2020-07-06
+chore: log error
+
 ## v1.4.0 - 2020-05-01
 
 chore: upgrade did-resolver libraries
