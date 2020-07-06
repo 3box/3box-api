@@ -89,6 +89,7 @@ class APIService {
       profile = await this._readDB(publicDBAddress)
       res.json(this._mungeProfile(profile, metadata))
     } catch (e) {
+      console.error('Error: Failed to load profile', e)
       errorToResponse(res, e, 'Error: Failed to load profile')
     }
 
