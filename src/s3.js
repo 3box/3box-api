@@ -26,6 +26,7 @@ const ipfsRepo = (config) => {
     endpoint,
     s3ForcePathStyle,
     signatureVersion,
+    shardBlockstore
   } = config
   const createIfMissing = false
 
@@ -48,6 +49,9 @@ const ipfsRepo = (config) => {
     createIfMissing
   }
 
+  const blockStoreConfig = shardBlockstore ? Object.assign(storeConfig, { sharding: true }) : storeConfig
+
+
   return new IPFSRepo(path, {
     storageBackends: {
       blocks: S3Store,
@@ -56,7 +60,7 @@ const ipfsRepo = (config) => {
       keys: LevelStore
     },
     storageBackendOptions: {
-      blocks: storeConfig,
+      blocks: blockStoreConfig,
       datastore: memStoreConfig,
       root: memStoreConfig,
       keys: memStoreConfig

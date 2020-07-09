@@ -11,6 +11,7 @@ const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY
 const ANALYTICS_ACTIVE = process.env.ANALYTICS_ACTIVE === 'true'
 const ORBIT_REDIS_PATH = process.env.ORBIT_REDIS_PATH
 const DAYS15 = 60 * 60 * 24 * 15 // 15 day ttl
+const SHARD_BLOCKSTORE = process.env.SHARD_BLOCKSTORE === 'true'
 
 const analyticsClient = analytics(SEGMENT_WRITE_KEY, ANALYTICS_ACTIVE)
 const orbitCacheRedisOpts = ORBIT_REDIS_PATH ? { host: ORBIT_REDIS_PATH } : null
@@ -22,6 +23,7 @@ const s3Config = {
   endpoint: process.env.AWS_S3_ENDPOINT,
   s3ForcePathStyle: process.env.AWS_S3_ADDRESSING_STYLE === 'path',
   signatureVersion: process.env.AWS_S3_SIGNATURE_VERSION,
+  shardBlockstore: SHARD_BLOCKSTORE
 }
 
 const isS3Repo = Boolean(process.env.AWS_BUCKET_NAME)

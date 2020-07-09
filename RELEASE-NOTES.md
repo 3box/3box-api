@@ -1,5 +1,8 @@
 # Release Notes
 
+## v1.4.2 - 2020-07-06
+feat: blockstore shard option 
+
 ## v1.4.1 - 2020-07-06
 chore: log error
 
