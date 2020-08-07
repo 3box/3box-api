@@ -38,7 +38,7 @@
     "exectimer": "^2.2.1",
     "express": "^4.16.4",
     "express-bunyan-logger": "^1.3.3",
-    "ipfs-block-service": "^0.17.1",
+    "ipfs-block-service": "^0.18.0",
     "ipfs-log": "^4.6.1",
     "ipfs-repo": "^3.0.3",
     "ipfs-unixfs": "^0.2.0",
