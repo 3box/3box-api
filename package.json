@@ -52,7 +52,7 @@
     "orbit-db": "^0.23.1",
     "orbit-db-access-controllers": "^0.2.4",
     "orbit-db-cache-redis": "0.0.3",
-    "orbit-db-feedstore": "^1.7.0",
+    "orbit-db-feedstore": "^1.10.0",
     "orbit-db-io": "^0.2.0",
     "orbit-db-kvstore": "^1.7.0",
     "redis": "^2.8.0",
