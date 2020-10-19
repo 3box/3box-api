@@ -57,7 +57,7 @@
     "orbit-db-kvstore": "^1.7.0",
     "redis": "^2.8.0",
     "url-parse": "^1.4.7",
-    "yargs": "^13.2.2"
+    "yargs": "^16.1.0"
   },
   "jest": {
     "testEnvironment": "node",
