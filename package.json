@@ -55,7 +55,7 @@
     "orbit-db-feedstore": "^1.7.0",
     "orbit-db-io": "^0.2.0",
     "orbit-db-kvstore": "^1.7.0",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "url-parse": "^1.4.7",
     "yargs": "^13.2.2"
   },
