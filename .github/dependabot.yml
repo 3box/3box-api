@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  target-branch: develop
+  reviewers:
+  - zachferland
+  assignees:
+  - zachferland
+  allow:
+  - dependency-type: production
+  ignore:
+  - dependency-name: redis
+    versions:
+    - 3.0.2
+    - 3.1.0
+  - dependency-name: datastore-level
+    versions:
+    - 3.0.0
+    - 4.0.0
+  - dependency-name: cids
+    versions:
+    - 1.1.5
+  - dependency-name: orbit-db
+    versions:
+    - 0.26.0
+  - dependency-name: ipfs-block-service
+    versions:
+    - 0.18.0
