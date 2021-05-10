@@ -34,7 +34,7 @@
     "datastore-level": "^1.1.0",
     "datastore-s3": "^2.0.0",
     "did-resolver": "^1.1.0",
-    "dotenv": "^6.2.0",
+    "dotenv": "^9.0.1",
     "exectimer": "^2.2.1",
     "express": "^4.16.4",
     "express-bunyan-logger": "^1.3.3",
